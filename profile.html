@@ -215,9 +215,11 @@ startWebsiteLanguage();
       selected = records.find(r => r.profile.id === selected?.profile.id) || records[0]; renderList();
     } catch (error) { if (!sessionActive()) { void exit(); return; } problem(error); }
   }
+  function formatBirthDate(value) { const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || ""); return match ? `${match[3]}-${match[2]}-${match[1]}` : value || "Not set"; }
+  function formatBirthTime(value) { const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value || ""); if (!match) return value || "Not set"; const hour = Number(match[1]); return `${String(hour % 12 || 12).padStart(2, "0")}:${match[2]} ${hour < 12 ? "AM" : "PM"}`; }
   function detail(label, value) { const row = document.createElement("p"); const bold = document.createElement("strong"); bold.textContent = label; const span=document.createElement("span");if(value&&!/^(male|female|single|married|divorced|widowed|separated)$/i.test(value))span.dataset.languagePrivate="true";span.textContent=value || "Not set";row.append(bold,span); return row; }
   function profileCard(profile, target) {
-    target.replaceChildren(detail("Profile", profile.nickname || "Private Profile"), detail("Date of birth", profile.birthDate), detail("Birth time", profile.birthTime), detail("Place of birth city name", profile.birthPlace), ...(profile.currentLocation ? [detail("Current city", profile.currentLocation)] : []), detail("Gender", profile.gender?.toUpperCase()), detail("Marital status", profile.maritalStatus?.toUpperCase()));
+    target.replaceChildren(detail("Profile", profile.nickname || "Private Profile"), detail("Date of birth", formatBirthDate(profile.birthDate)), detail("Birth time", formatBirthTime(profile.birthTime)), detail("Place of birth city name", profile.birthPlace), ...(profile.currentLocation ? [detail("Current city", profile.currentLocation)] : []), detail("Gender", profile.gender?.toUpperCase()), detail("Marital status", profile.maritalStatus?.toUpperCase()));
   }
   $("ask").addEventListener("click", () => { if (!sessionActive()) { void exit(); return; } if (selected) location.assign("ask.html?profile=" + encodeURIComponent(selected.profile.id)); });
   function actionStatus(message) { $("action-status").textContent=message;$("action-status").hidden=false; }
