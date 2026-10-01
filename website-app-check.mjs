@@ -1,7 +1,7 @@
 import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app-check.js";
 
 // Replace this with the public site key from your score-based reCAPTCHA Enterprise key.
-const recaptchaEnterpriseSiteKey = "PASTE_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE";
+const recaptchaEnterpriseSiteKey = "6LdZwdktAAAAAM3xlmW2UKm4suTf-Qds4g_od5Hf";
 let appCheckInstance;
 
 export function initializeWebsiteAppCheck(firebaseApp) {
