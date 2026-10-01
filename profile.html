@@ -165,7 +165,7 @@ startWebsiteLanguage();
     if (signOutInProgress) return;
     signOutInProgress = true; $("view").hidden = true; $("loading").hidden = false; $("loading").textContent = "Signing out…";
     clearTimeout(timer); localStorage.removeItem(activityKey);
-    try { const { signOut } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"); await signOut(auth); location.replace("login.html"); }
+    try { const { signOut } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"); await signOut(auth); location.replace("index.html"); }
     catch { $("loading").textContent = "Sign-out failed. Reload the page and try again."; signOutInProgress = false; }
   }
   function checkTimeout() {
