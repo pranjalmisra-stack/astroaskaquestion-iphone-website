@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#fff8e7"><title>Ask Your KP Astrology Question | AstroAskAQuestion</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff8e7;color:#202020;font:18px/1.5 Arial,sans-serif}main{max-width:610px;margin:auto;padding:24px 16px 48px}h1{font-size:26px;line-height:1.2;margin:0 0 12px}h2{font-size:19px;margin:0 0 8px}p{margin:6px 0 12px}.card{background:#e6e0e9;border-radius:14px;padding:18px 16px;margin:14px 0}button,select{width:100%;font:700 16px/1.5 Arial,sans-serif;padding:10px 16px;border-radius:999px;border:0;background:#6950a1;color:white;margin:5px 0;cursor:pointer}.outline,summary{background:transparent;border:1px solid #847c8a;color:#6950a1}button:disabled{background:#e5ddcd;color:#999;cursor:not-allowed}.small{font-size:14px;line-height:1.4}.tips{font-size:14px;font-weight:700}textarea{width:100%;min-height:118px;resize:vertical;background:transparent;border:1px solid #847c8a;border-radius:4px;padding:14px;font:18px/1.5 Arial,sans-serif;color:#202020;margin-top:18px}select{background:transparent;color:#6950a1;border:1px solid #847c8a}summary{padding:9px 16px;border-radius:999px;font-size:16px;font-weight:700;cursor:pointer;margin:6px 0}details button{text-align:left;font-weight:400}.row{display:flex;gap:8px}.answer{white-space:pre-wrap;overflow-wrap:anywhere}dialog{max-width:420px;width:calc(100% - 32px);border:1px solid #847c8a;border-radius:14px;background:#fff8e7;padding:20px}dialog::backdrop{background:#0008}.history-item{margin:20px 0;padding-bottom:18px;border-bottom:1px solid #c7bdce}.error{color:#9e1735;font-weight:700}label{display:block;font-size:16px;font-weight:700}[hidden]{display:none!important}
+</style><style>
+/* Phone layouts, including iPhone safe areas and narrow Android screens. */
+@media screen {
+ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ body{overflow-wrap:anywhere}
+ main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}
+ main>*,section,form,fieldset,.card,.row>*{min-width:0;max-width:100%}
+ img,svg,video{max-width:100%;height:auto}
+ button,input,select,textarea{max-width:100%;min-width:0;font-size:16px}
+ button,summary{min-height:48px;white-space:normal;overflow-wrap:anywhere;line-height:1.4;touch-action:manipulation}
+ input:not([type=radio]):not([type=checkbox]),select{min-height:48px;width:100%}
+ .choice{min-height:44px;max-width:100%}
+ .row{display:flex;flex-wrap:wrap;gap:8px}
+ .row>button{flex:1 1 140px;width:auto}
+ .answer,.report,#report-text{overflow-wrap:anywhere;word-break:normal}
+ dialog{max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);overflow-y:auto}
+ @media(max-width:480px){
+  main{padding-top:max(20px,env(safe-area-inset-top))}
+  h1{font-size:clamp(22px,6vw,28px)}
+  .card{padding:16px 12px}
+  button{padding:12px 14px}
+ }
+ @media(max-width:400px){.row{flex-direction:column}.row>button{flex:none;width:100%}}
+}
+</style><style id="mobile-compatibility">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media screen and (max-width:700px){
+  body{overflow-wrap:anywhere}
+  img,svg,video,canvas,iframe{max-width:100%;height:auto}
+  header,nav,main,footer,section,article,.container,.header-container{min-width:0;max-width:100%}
+  input,select,textarea,button{max-width:100%;touch-action:manipulation}
+  button,summary,.play-button{min-height:44px}
+}
+@supports(padding:max(0px)){
+  header,nav,footer{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+}
+</style></head><body><main><p id="loading" role="status">Checking your sign-in…</p><div id="app" hidden>
+<h1 id="kp-page-title" data-language-private="true">ASK YOUR KP ASTROLOGY QUESTION</h1><p><strong id="kp-answer-label" data-language-private="true">Your KP astrology answer</strong></p>
+<div id="profile" class="card"></div>
+<p class="small">AstroAskAQuestion is the website interface. AstrologyAPI KP endpoints provide the KP astrology data and the AI model interprets that data.</p>
+<div class="card"><h2 id="balance">Wallet balance: loading…</h2><p id="point-price">Price per point: loading…</p></div>
+<button id="past-toggle" class="outline" aria-expanded="false">PAST KP ANSWERS (0)</button>
+<div id="past" class="card" hidden><h2 id="past-heading">Past KP answers</h2><p class="small">Profiles are stored in the cloud and synchronized with your Google account after sign-in. Internet is required to restore profiles and astrology answers. Only the latest 20 answers per profile are stored in history.</p><p id="history-status" class="small" role="status"></p><div id="history"></div><button id="clear-history" class="outline" hidden>CLEAR ALL PAST KP ANSWERS</button></div>
+<div class="card"><h2 id="question-price">One question point: loading…</h2><p id="points">Wallet points: loading…</p><button id="payment">PROCEED TO PAYMENT</button><p class="small">Razorpay TEST MODE: no real money is charged. Payment details are handled by Razorpay; this website does not store card details. A point is deducted only after a valid answer is saved.</p><p id="payment-status" class="small" role="status"></p></div>
+<textarea id="question" maxlength="1200" placeholder="Type your question here or select one from the categories below" aria-label="Your astrology question"></textarea>
+<p class="small">Maximum 60 words per question.<br><span id="count">0 / 60</span></p>
+<p class="tips">Tips for asking astrology questions: Keep your question as specific as possible and related to your life. If you want remedies for a solution, you can add a comment in your question at the end saying, “Give me some remedies”.</p>
+<p class="tips">After selecting a question from the list below or writing your own custom question above, scroll down and tap ASK YOUR QUESTION to submit your question.</p>
+<h2>TIP QUESTION CATEGORIES</h2><div id="categories"></div>
+<p class="small">Your selected birth details and question are sent to the KP astrology service to generate the answer. For a non-English answer, Google Translation processes the question and answer.</p>
+<button id="submit" disabled>ASK YOUR QUESTION</button><p id="status" role="status"></p><button id="recover" class="outline" hidden>CHECK FOR MY ANSWER</button>
+<div class="card"><h2 id="answer-heading">Your KP astrology answer</h2><div id="answer" class="answer" aria-live="polite"></div><div class="row"><button id="copy" class="outline" disabled>COPY</button><button id="share" class="outline" disabled>SHARE</button></div><button id="new" class="outline">ASK A NEW KP QUESTION</button><p class="small">Astrology is interpretive and should not be treated as certainty or professional medical advice, legal or financial advice. Astrology answers are for personal guidance.</p></div>
+<button id="back" class="outline">BACK TO PROFILE</button><button id="signout" class="outline">SIGN OUT</button><button id="delete-account">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button><p id="account-status" class="small" role="status"></p>
+</div></main><dialog id="confirm-delete"><h2 id="confirm-title"></h2><p>This permanently deletes the selected past answer data from your cloud account.</p><div class="row"><button id="confirm-no" class="outline">NO</button><button id="confirm-yes">YES</button></div></dialog><script type="module">
+import {startWebsiteLanguage} from "./website-language.mjs";
+import {initializeWebsiteAppCheck,websiteAppCheckHeaders} from "./website-app-check.mjs";
+startWebsiteLanguage();
+
+const kpUiTranslations={
+  en:{
+    title:"ASK YOUR KP ASTROLOGY QUESTION",
+    answer:"Your KP astrology answer",
+    past:"PAST KP ANSWERS",
+    pastHeading:"Past KP answers",
+    clear:"CLEAR ALL PAST KP ANSWERS",
+    newQuestion:"ASK A NEW KP QUESTION"
+  },
+  as:{
+    title:"আপোনাৰ KP জ্যোতিষ প্ৰশ্ন সোধক",
+    answer:"আপোনাৰ KP জ্যোতিষৰ উত্তৰ",
+    past:"পূৰ্বৰ KP উত্তৰ",
+    pastHeading:"পূৰ্বৰ KP উত্তৰসমূহ",
+    clear:"পূৰ্বৰ সকলো KP উত্তৰ মচক",
+    newQuestion:"নতুন KP প্ৰশ্ন সোধক"
+  },
+  bn:{
+    title:"আপনার KP জ্যোতিষ প্রশ্ন জিজ্ঞাসা করুন",
+    answer:"আপনার KP জ্যোতিষের উত্তর",
+    past:"আগের KP উত্তর",
+    pastHeading:"আগের KP উত্তরসমূহ",
+    clear:"আগের সব KP উত্তর মুছুন",
+    newQuestion:"নতুন KP প্রশ্ন জিজ্ঞাসা করুন"
+  },
+  doi:{
+    title:"अपना KP ज्योतिष प्रश्न पूछो",
+    answer:"अपना KP ज्योतिष उत्तर",
+    past:"पिछले KP जवाब",
+    pastHeading:"पिछले KP जवाब",
+    clear:"सारे पिछले KP जवाब मिटाओ",
+    newQuestion:"नया KP सवाल पूछो"
+  },
+  gu:{
+    title:"તમારો KP જ્યોતિષ પ્રશ્ન પૂછો",
+    answer:"તમારો KP જ્યોતિષ જવાબ",
+    past:"પાછલા KP જવાબો",
+    pastHeading:"પાછલા KP જવાબો",
+    clear:"બધા પાછલા KP જવાબો કાઢી નાખો",
+    newQuestion:"નવો KP પ્રશ્ન પૂછો"
+  },
+  hi:{
+    title:"अपना KP ज्योतिष प्रश्न पूछें",
+    answer:"आपका KP ज्योतिष उत्तर",
+    past:"पिछले KP उत्तर",
+    pastHeading:"पिछले KP उत्तर",
+    clear:"सभी पिछले KP उत्तर हटाएँ",
+    newQuestion:"नया KP प्रश्न पूछें"
+  },
+  kn:{
+    title:"ನಿಮ್ಮ KP ಜ್ಯೋತಿಷ್ಯ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ",
+    answer:"ನಿಮ್ಮ KP ಜ್ಯೋತಿಷ್ಯ ಉತ್ತರ",
+    past:"ಹಿಂದಿನ KP ಉತ್ತರಗಳು",
+    pastHeading:"ಹಿಂದಿನ KP ಉತ್ತರಗಳು",
+    clear:"ಎಲ್ಲಾ ಹಿಂದಿನ KP ಉತ್ತರಗಳನ್ನು ಅಳಿಸಿ",
+    newQuestion:"ಹೊಸ KP ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ"
+  },
+  kok:{
+    title:"आपलो KP ज्योतिष प्रश्न विचारात",
+    answer:"आपलो KP ज्योतिष जवाब",
+    past:"पयलेचे KP जवाब",
+    pastHeading:"पयलेचे KP जवाब",
+    clear:"सगळे पयलेचे KP जवाब पुसात",
+    newQuestion:"नवो KP प्रश्न विचारात"
+  },
+  mai:{
+    title:"अपन KP ज्योतिष प्रश्न पूछू",
+    answer:"अहाँक KP ज्योतिष उत्तर",
+    past:"पछिला KP उत्तर",
+    pastHeading:"पछिला KP उत्तर",
+    clear:"सभ पछिला KP उत्तर मेटाउ",
+    newQuestion:"नव KP प्रश्न पूछू"
+  },
+  ml:{
+    title:"നിങ്ങളുടെ KP ജ്യോതിഷ ചോദ്യം ചോദിക്കുക",
+    answer:"നിങ്ങളുടെ KP ജ്യോതിഷ ഉത്തരം",
+    past:"മുൻ KP ഉത്തരങ്ങൾ",
+    pastHeading:"മുൻ KP ഉത്തരങ്ങൾ",
+    clear:"മുൻപത്തെ എല്ലാ KP ഉത്തരങ്ങളും ഇല്ലാതാക്കുക",
+    newQuestion:"പുതിയ KP ചോദ്യം ചോദിക്കുക"
+  },
+  mni:{
+    title:"ꯅꯪꯒꯤ KP ꯖ꯭ꯌꯣꯇꯤꯁ ꯋꯥꯍꯪ ꯍꯥꯡꯗꯣꯛꯄꯤꯌꯨ",
+    answer:"ꯅꯪꯒꯤ KP ꯖ꯭ꯌꯣꯇꯤꯁ ꯑꯋꯥꯕ",
+    past:"ꯑꯅꯧꯕ KP ꯑꯋꯥꯕ",
+    pastHeading:"ꯑꯅꯧꯕ KP ꯑꯋꯥꯕꯁꯤꯡ",
+    clear:"ꯑꯅꯧꯕ KP ꯑꯋꯥꯕꯁꯤꯡ ꯄꯨꯝꯕ ꯃꯥꯡꯍꯜꯂꯨ",
+    newQuestion:"ꯅꯧꯕ KP ꯋꯥꯍꯪ ꯍꯥꯡꯗꯣꯛꯄꯤꯌꯨ"
+  },
+  mr:{
+    title:"तुमचा KP ज्योतिष प्रश्न विचारा",
+    answer:"तुमचा KP ज्योतिष उत्तर",
+    past:"मागील KP उत्तरे",
+    pastHeading:"मागील KP उत्तरे",
+    clear:"सर्व मागील KP उत्तरे हटवा",
+    newQuestion:"नवीन KP प्रश्न विचारा"
+  },
+  ne:{
+    title:"आफ्नो KP ज्योतिष प्रश्न सोध्नुहोस्",
+    answer:"तपाईंको KP ज्योतिष उत्तर",
+    past:"अघिल्ला KP उत्तरहरू",
+    pastHeading:"अघिल्ला KP उत्तरहरू",
+    clear:"सबै अघिल्ला KP उत्तरहरू मेटाउनुहोस्",
+    newQuestion:"नयाँ KP प्रश्न सोध्नुहोस्"
+  },
+  or:{
+    title:"ଆପଣଙ୍କର KP ଜ୍ୟୋତିଷ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ",
+    answer:"ଆପଣଙ୍କର KP ଜ୍ୟୋତିଷ ଉତ୍ତର",
+    past:"ପୂର୍ବର KP ଉତ୍ତରଗୁଡ଼ିକ",
+    pastHeading:"ପୂର୍ବର KP ଉତ୍ତରଗୁଡ଼ିକ",
+    clear:"ସମସ୍ତ ପୂର୍ବର KP ଉତ୍ତର ହଟାନ୍ତୁ",
+    newQuestion:"ନୂଆ KP ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ"
+  },
+  pa:{
+    title:"ਆਪਣਾ KP ਜੋਤਿਸ਼ ਸਵਾਲ ਪੁੱਛੋ",
+    answer:"ਤੁਹਾਡਾ KP ਜੋਤਿਸ਼ ਜਵਾਬ",
+    past:"ਪਿਛਲੇ KP ਜਵਾਬ",
+    pastHeading:"ਪਿਛਲੇ KP ਜਵਾਬ",
+    clear:"ਸਾਰੇ ਪਿਛਲੇ KP ਜਵਾਬ ਮਿਟਾਓ",
+    newQuestion:"ਨਵਾਂ KP ਸਵਾਲ ਪੁੱਛੋ"
+  },
+  sa:{
+    title:"स्वीयं KP ज्योतिषप्रश्नं पृच्छत",
+    answer:"भवतः KP ज्योतिषोत्तरम्",
+    past:"पूर्वाणि KP उत्तराणि",
+    pastHeading:"पूर्वाणि KP उत्तराणि",
+    clear:"सर्वाणि पूर्व KP उत्तराणि विलोपयत",
+    newQuestion:"नूतनं KP प्रश्नं पृच्छत"
+  },
+  sd:{
+    title:"پنهنجو KP نجوم جو سوال پڇو",
+    answer:"توهان جو KP نجوم جو جواب",
+    past:"اڳيان KP جواب",
+    pastHeading:"اڳيان KP جواب",
+    clear:"سڀ اڳيان KP جواب ختم ڪريو",
+    newQuestion:"نئون KP سوال پڇو"
+  },
+  ta:{
+    title:"உங்கள் KP ஜோதிடக் கேள்வியைக் கேளுங்கள்",
+    answer:"உங்கள் KP ஜோதிடப் பதில்",
+    past:"முந்தைய KP பதில்கள்",
+    pastHeading:"முந்தைய KP பதில்கள்",
+    clear:"முந்தைய அனைத்து KP பதில்களையும் அழிக்கவும்",
+    newQuestion:"புதிய KP கேள்வியைக் கேளுங்கள்"
+  },
+  te:{
+    title:"మీ KP జ్యోతిష్య ప్రశ్నను అడగండి",
+    answer:"మీ KP జ్యోతిష్య సమాధానం",
+    past:"మునుపటి KP సమాధానాలు",
+    pastHeading:"మునుపటి KP సమాధానాలు",
+    clear:"అన్ని మునుపటి KP సమాధానాలను తొలగించండి",
+    newQuestion:"కొత్త KP ప్రశ్నను అడగండి"
+  },
+  ur:{
+    title:"اپنا KP علم نجوم کا سوال پوچھیں",
+    answer:"آپ کا KP علم نجوم کا جواب",
+    past:"پچھلے KP جوابات",
+    pastHeading:"پچھلے KP جوابات",
+    clear:"تمام پچھلے KP جوابات حذف کریں",
+    newQuestion:"نیا KP سوال پوچھیں"
+  }
+};
+
+function updateKpUiLanguage(){
+  const code=localStorage.getItem("astroask-website-language")||"en";
+  const t=kpUiTranslations[code]||kpUiTranslations.en;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el){el.textContent=value;el.dataset.languagePrivate="true";}};
+  set("kp-page-title",t.title);
+  set("kp-answer-label",t.answer);
+  set("past-heading",t.pastHeading);
+  set("answer-heading",t.answer);
+  const clear=document.getElementById("clear-history");
+  if(clear){clear.textContent=t.clear;clear.dataset.languagePrivate="true";}
+  const newButton=document.getElementById("new");
+  if(newButton){newButton.textContent=t.newQuestion;newButton.dataset.languagePrivate="true";}
+  const toggle=document.getElementById("past-toggle");
+  if(toggle && toggle.textContent.startsWith("PAST KP")) toggle.textContent=t.past+" (0)";
+}
+updateKpUiLanguage();
+window.addEventListener("storage",event=>{
+  if(event.key==="astroask-website-language") updateKpUiLanguage();
+});
+
+import {setupWebsitePayments} from "./website-payments.mjs";
+import {confirmAction,deleteWebsiteAccount} from "./website-actions.mjs";
+const firebaseConfig = {
+  "apiKey": "AIzaSyBA4HhtLV4iGdTR5BJIGaar4jGLPsbBLAY",
+  "authDomain": "astroask-website.firebaseapp.com",
+  "projectId": "astroask-website",
+  "storageBucket": "astroask-website.firebasestorage.app",
+  "messagingSenderId": "916860375828",
+  "appId": "1:916860375828:web:617082973c4a8c0ff86801"
+};
+const askSignOutCopy={
+  en:["SIGN OUT?","Are you sure you want to sign out?","NO","YES"],
+  as:["ছাইন আউট কৰিবনে?","আপুনি নিশ্চিতভাৱে ছাইন আউট কৰিব বিচাৰেনে?","নহয়","হয়"],
+  bn:["সাইন আউট করবেন?","আপনি কি নিশ্চিত যে সাইন আউট করতে চান?","না","হ্যাঁ"],
+  doi:["साइन आउट करना ऐ?","क्या तुस पक्का साइन आउट करना चांह्दे ओ?","नेईं","हां"],
+  gu:["સાઇન આઉટ કરવું છે?","શું તમે ખરેખર સાઇન આઉટ કરવા માંગો છો?","ના","હા"],
+  hi:["साइन आउट करें?","क्या आप वाकई साइन आउट करना चाहते हैं?","नहीं","हाँ"],
+  kn:["ಸೈನ್ ಔಟ್ ಮಾಡಬೇಕೇ?","ನೀವು ಖಚಿತವಾಗಿ ಸೈನ್ ಔಟ್ ಮಾಡಲು ಬಯಸುವಿರಾ?","ಬೇಡ","ಹೌದು"],
+  kok:["सायन आउट करचें?","तुमी खात्रीन सायन आउट करपाक सोदतात?","ना","हय"],
+  mai:["साइन आउट करी?","की अहाँ निश्चित छी जे साइन आउट करय चाहैत छी?","नहि","हँ"],
+  ml:["സൈൻ ഔട്ട് ചെയ്യണോ?","സൈൻ ഔട്ട് ചെയ്യണമെന്ന് ഉറപ്പാണോ?","വേണ്ട","അതെ"],
+  mni:["ꯁꯥꯏꯟ ꯑꯥꯎꯠ ꯇꯧꯕ꯭ꯔꯥ?","ꯁꯥꯏꯟ ꯑꯥꯎꯠ ꯇꯧꯕꯥ ꯅꯤꯡꯁꯤꯡꯕ꯭ꯔꯥ?","ꯅꯠꯇꯦ","ꯍꯣꯏ"],
+  mr:["साइन आउट करायचे?","तुम्हाला नक्की साइन आउट करायचे आहे का?","नाही","होय"],
+  ne:["साइन आउट गर्ने?","के तपाईं साइन आउट गर्न निश्चित हुनुहुन्छ?","होइन","हो"],
+  or:["ସାଇନ୍ ଆଉଟ୍ କରିବେ?","ଆପଣ ନିଶ୍ଚିତ ଭାବେ ସାଇନ୍ ଆଉଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?","ନା","ହଁ"],
+  pa:["ਸਾਈਨ ਆਉਟ ਕਰਨਾ ਹੈ?","ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਸਾਈਨ ਆਉਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?","ਨਹੀਂ","ਹਾਂ"],
+  sa:["निर्गच्छामः किम्?","भवान् निश्चयेन निर्गन्तुम् इच्छति किम्?","न","आम्"],
+  sd:["سائن آئوٽ ڪجي؟","ڇا توهان کي پڪ آهي ته سائن آئوٽ ڪرڻ چاهيو ٿا؟","نه","ها"],
+  ta:["வெளியேறவா?","நிச்சயமாக வெளியேற விரும்புகிறீர்களா?","இல்லை","ஆம்"],
+  te:["సైన్ అవుట్ చేయాలా?","మీరు ఖచ్చితంగా సైన్ అవుట్ చేయాలనుకుంటున్నారా?","వద్దు","అవును"],
+  ur:["سائن آؤٹ کریں؟","کیا آپ واقعی سائن آؤٹ کرنا چاہتے ہیں؟","نہیں","ہاں"]
+};
+function confirmAskSignOut(){
+  const code=localStorage.getItem("astroask-website-language")||"en";
+  const [title,message,no,yes]=askSignOutCopy[code]||askSignOutCopy.en;
+  return new Promise(resolve=>{
+    const dialog=document.createElement("dialog"),heading=document.createElement("h2"),text=document.createElement("p"),row=document.createElement("div");
+    dialog.dataset.languagePrivate="true";heading.textContent=title;text.textContent=message;row.style.display="flex";row.style.gap="8px";
+    Object.assign(dialog.style,{maxWidth:"420px",width:"calc(100% - 32px)",border:"1px solid #847c8a",borderRadius:"14px",background:"#fff8e7",padding:"20px"});
+    let done=false;const finish=value=>{if(done)return;done=true;dialog.close();dialog.remove();resolve(value)};
+    for(const [label,value] of [[no,false],[yes,true]]){const button=document.createElement("button");button.type="button";button.textContent=label;button.onclick=()=>finish(value);row.append(button);}
+    dialog.oncancel=event=>{event.preventDefault();finish(false)};dialog.append(heading,text,row);document.body.append(dialog);dialog.showModal();
+  });
+}
+const apiRoot='https://astroask-website-backend.onrender.com',activityKey='astroask-website-last-activity',timeoutMs=15*60*1000,$=id=>document.getElementById(id);
+let auth,user,profile,records=[],balance=0,busy=false,pending='',pendingKey='',exiting=false,timer;
+const profileId=new URL(location.href).searchParams.get('profile');
+function formatBirthDate(value){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||'');return match?`${match[3]}-${match[2]}-${match[1]}`:value||'Not set'}
+function formatBirthTime(value){const match=/^([01]\d|2[0-3]):([0-5]\d)$/.exec(value||'');if(!match)return value||'Not set';const hour=Number(match[1]);return `${String(hour%12||12).padStart(2,'0')}:${match[2]} ${hour<12?'AM':'PM'}`}
+function active(){const at=Number(localStorage.getItem(activityKey));return Boolean(user&&auth?.currentUser?.uid===user.uid&&!exiting&&at&&Date.now()-at<timeoutMs)}
+async function exit(){if(exiting)return;exiting=true;if($('confirm-delete').open)$('confirm-delete').close();$('app').hidden=true;$('loading').hidden=false;$('loading').textContent='Signing out…';clearTimeout(timer);localStorage.removeItem(activityKey);try{const {signOut}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');await signOut(auth)}finally{location.replace('index.html')}}
+function check(){if(!user||exiting)return;if(!active()){void exit();return}clearTimeout(timer);timer=setTimeout(check,Math.max(1,timeoutMs-(Date.now()-Number(localStorage.getItem(activityKey)))))}
+function activity(){if(!active()){check();return}const now=Date.now();if(now-Number(localStorage.getItem(activityKey))>1000)localStorage.setItem(activityKey,String(now));check()}
+for(const event of ['pointerdown','keydown','scroll','touchstart'])window.addEventListener(event,activity,{passive:true});window.addEventListener('storage',e=>{if(e.key===activityKey||e.key===null)check()});window.addEventListener('focus',check);document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});window.addEventListener('pageshow',()=>check());
+async function request(path,options={}){if(!active())throw Error('Your session has ended.');const token=await user.getIdToken();const appCheckHeaders=await websiteAppCheckHeaders();if(!active())throw Error('Your session has ended.');const controller=new AbortController(),cancel=()=>controller.abort();options.signal?.addEventListener('abort',cancel,{once:true});if(options.signal?.aborted)controller.abort();const timeout=setTimeout(cancel,60000);let r;try{r=await fetch(apiRoot+path,{...options,signal:controller.signal,headers:{Authorization:`Bearer ${token}`,...appCheckHeaders,...(options.body?{'Content-Type':'application/json'}:{})}});}finally{clearTimeout(timeout);options.signal?.removeEventListener('abort',cancel);}if(!active())throw Error('Your session has ended.');const data=await r.json();if(!r.ok){if(r.status===401)void exit();const e=Error(data.error||`Cloud service returned HTTP ${r.status}`);e.status=r.status;throw e}return data}
+function status(message,error=false){$('status').textContent=message;$('status').className=error?'error':''}
+function controls(){const words=$('question').value.trim().split(/\s+/u).filter(Boolean).length;$('count').textContent=`${words} / 60`;$('submit').disabled=busy||Boolean(pending)||balance<1||words<1||words>60;$('question').disabled=busy||Boolean(pending);$('new').disabled=busy||Boolean(pending);for(const b of $('categories').querySelectorAll('button'))b.disabled=busy||Boolean(pending)}
+function displayPrice(value){
+ const amount=Number(value);
+ if(value==null || !Number.isFinite(amount) || amount<=0)throw Error('Website price is not configured');
+ const price='₹'+amount.toFixed(2);
+ $('point-price').textContent='Price per point: '+price;
+ $('question-price').textContent='One question point: '+price;
+ $('payment').textContent='PROCEED TO PAYMENT • '+price;
+}
+function wallet(points){balance=Number(points)||0;$('balance').textContent=`Wallet balance: ${balance} points`;$('points').textContent=`Wallet points: ${balance}`;controls()}
+let historyVersion='',historyItems=[],historyBusy=false;
+function historyView(){
+ const h=historyItems.length?historyItems:(records.find(r=>r.profile.id===profileId)?.history||[]);
+ $('history').replaceChildren();$('past-toggle').textContent=$('past').hidden?`PAST ANSWERS (${h.length})`:'HIDE PAST ANSWERS';
+ $('clear-history').hidden=!h.length;$('clear-history').disabled=!historyVersion||historyBusy;
+ if(!h.length){const empty=document.createElement('p');empty.textContent='No past answers for this profile.';$('history').append(empty)}
+ for(const item of h.slice(0,20)){
+  const section=document.createElement('section'),title=document.createElement('h2'),text=document.createElement('p'),row=document.createElement('div');section.className='history-item';title.textContent=item.question;text.className='answer';text.textContent=item.answer;row.className='row';
+  for(const [label,handler] of [['COPY',()=>copyText(item.answer)],['SHARE',()=>shareText(item.answer)]]){const button=document.createElement('button');button.className='outline';button.textContent=label;button.onclick=handler;row.append(button)}
+  const remove=document.createElement('button');remove.className='outline';remove.textContent='DELETE THIS ANSWER';remove.disabled=!historyVersion||historyBusy;remove.onclick=()=>void deleteHistory(item.id,false);
+  section.append(title,text,row,remove);$('history').append(section);
+ }
+}
+async function copyText(text){try{await navigator.clipboard.writeText(text);$('history-status').textContent='Answer copied.'}catch{$('history-status').textContent='Copy failed. Select the answer text and copy it manually.'}}
+async function shareText(text){try{if(navigator.share)await navigator.share({title:'Your KP astrology answer',text});else await copyText(text)}catch(e){if(e.name!=='AbortError')$('history-status').textContent='Could not share the answer.'}}
+function confirmation(title){return new Promise(resolve=>{const dialog=$('confirm-delete');$('confirm-title').textContent=title;let settled=false;const finish=value=>{if(settled)return;settled=true;dialog.close();resolve(value)};$('confirm-no').onclick=()=>finish(false);$('confirm-yes').onclick=()=>finish(true);dialog.oncancel=event=>{event.preventDefault();finish(false)};dialog.showModal()})}
+async function deleteHistory(id,clear){
+ if(historyBusy||!historyVersion||!active())return;
+ const version=historyVersion;
+ if(!await confirmation(clear?'CLEAR ALL PAST ANSWERS?':'DELETE THIS ANSWER?'))return;
+ if(!active()){void exit();return}
+ historyBusy=true;historyView();$('history-status').textContent='Deleting from the cloud…';
+ try{const data=await request('/v1/web/kp-history',{method:'POST',body:JSON.stringify({profileId,version,...(clear?{clear:true}:{id})})});historyVersion=data.version;historyItems=data.items;const record=records.find(r=>r.profile.id===profileId);if(record)record.history=data.items;$('history-status').textContent=clear?'All past answers deleted.':'Answer deleted.'}
+ catch(e){$('history-status').textContent=e.message;if(e.status===409)await reloadHistory()}
+ finally{historyBusy=false;historyView()}
+}
+$('clear-history').onclick=()=>void deleteHistory(null,true);
+function answer(text){$('answer').textContent=text;$('copy').disabled=!text;$('share').disabled=!text}
+function clearPending(){clearTimeout(recoveryTimer);pending='';sessionStorage.removeItem(pendingKey);$('recover').hidden=true;controls()}
+async function reloadHistory(){
+ $('history-status').textContent='Loading past answers from the cloud…';
+ try{const profiles=await request('/v1/cloud/profiles');records=profiles.records;historyItems=[];historyVersion='';historyView();const data=await request('/v1/web/kp-history?profile='+encodeURIComponent(profileId));historyVersion=data.version;historyItems=data.items;const record=records.find(r=>r.profile.id===profileId);if(record)record.history=data.items;$('history-status').textContent=''}
+ catch(e){$('history-status').textContent=e.status===404?'Past answers loaded. Deploy the latest website backend to enable deletion.':`Could not refresh past answers: ${e.message}`}
+ finally{historyView()}
+}
+let recoveryTimer;
+function scheduleRecovery(){clearTimeout(recoveryTimer);if(pending&&active())recoveryTimer=setTimeout(()=>{if(active()&&!busy)void recover();else scheduleRecovery();},5000);}
+async function restoreCloudRequest(){
+ if(!active())return;
+ const saved=await request('/v1/web/kp-recovery?profileId='+encodeURIComponent(profileId));
+ const record=saved.answer;
+ if(record){pending=record.requestId;sessionStorage.setItem(pendingKey,pending);$('recover').hidden=false;}
+}
+window.addEventListener('online',()=>{if(active()&&!busy){if(pending)void recover();else void restoreCloudRequest().then(()=>pending?recover():null).catch(e=>status(e.message,true));}});
+window.addEventListener('focus',()=>{if(active()&&pending&&!busy)void recover();});
+async function recover(){if(!pending)return;busy=true;controls();try{const data=await request('/v1/web/kp-answer/'+encodeURIComponent(pending));if(data.profileId!==profileId)throw Error('This answer belongs to another profile.');if(data.status==='completed'){answer(data.message);wallet(data.availableQuestions);clearPending();status('Your saved answer was recovered.');await reloadHistory()}else if(data.status==='failed'){clearPending();status('The answer failed. Your point was not deducted.',true)}else status('Your question is still processing. Check again shortly.')}catch(e){if(e.status===404){clearPending();status('No saved request was found. You can submit your question.',true)}else status(e.message,true)}finally{busy=false;controls();scheduleRecovery()}}
+$('recover').onclick=()=>void recover();$('past-toggle').onclick=()=>{$('past').hidden=!$('past').hidden;$('past-toggle').setAttribute('aria-expanded',String(!$('past').hidden));historyView();if(!$('past').hidden)void reloadHistory()};$('delete-account').onclick=async()=>{const b=$('delete-account');b.disabled=true;try{await deleteWebsiteAccount({auth,active,request,exit,status:message=>{$('account-status').textContent=message}})}finally{b.disabled=false}};$('question').oninput=controls;
+$('back').onclick=()=>location.replace('profile.html');$('signout').onclick=async()=>{if(await confirmAskSignOut())void exit()};$('new').onclick=()=>{$('question').value='';answer('');status('');controls();$('question').focus()};$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('answer').textContent);status('Answer copied.')}catch{status('Copy failed. Select the answer text and copy it manually.',true)}};$('share').onclick=async()=>{try{if(navigator.share)await navigator.share({title:'Your KP astrology answer',text:$('answer').textContent});else {$('copy').click()}}catch(e){if(e.name!=='AbortError')status('Could not share the answer.',true)}};
+$('submit').onclick=async()=>{if($('submit').disabled)return;busy=true;pending=crypto.randomUUID();sessionStorage.setItem(pendingKey,pending);controls();status('Generating your answer. Please keep this page open…');try{const data=await request('/v1/web/kp-ask',{method:'POST',body:JSON.stringify({profileId,q:$('question').value.trim(),language:localStorage.getItem('astroask-website-language')||'en',requestId:pending})});if(data.status==='processing'){wallet(data.availableQuestions);$('recover').hidden=false;status('Your question is saved in the cloud and is processing. You can return later to get the answer.');}else{answer(data.message);wallet(data.availableQuestions);clearPending();status('Answer saved. One wallet point was deducted.');await reloadHistory()}}catch(e){if([400,402,404,502,503].includes(e.status)){clearPending();status(e.message,true)}else{$('recover').hidden=false;status('The result is not confirmed. Use CHECK FOR MY ANSWER before submitting again.',true)}}finally{busy=false;controls();scheduleRecovery()}};
+const categories=[["Career", ["Career: When will I get a job in the coming months?", "Career: My yearly review and appraisal are coming next month. Will I receive a salary increase?", "Career: My yearly review and appraisal are coming next month. Will I get promoted?", "Job and Livelihood: I have been unemployed for several months. Will I find a job in the coming months?", "Daily Wages: Will I get regular work and a more stable income in the coming months?", "Small Business: Is the coming period favourable for starting a small shop or home-based business?"]], ["Money and Debt", ["Money and Debt: I am struggling to repay my loans. Will my financial situation improve in the coming months?"]], ["Marriage & Relationships", ["Marriage & Relationships: When will I get married?", "Home and Family: When will the tension and financial pressure in my family reduce in the coming months?"]], ["Housing", ["Housing: Is the coming period favourable for renting, buying or constructing a home, and when might this be achieved?"]], ["Academics and competitive exams", ["I took my board exams last month. Will I pass with good marks?", "My board exams are coming next month. Will I pass with good marks?", "Education: Will I be able to arrange my child’s school or college fees on time next month?"]], ["Sports", ["I took a cricket sports qualifier for district selection last month. Will I be selected?", "Sports: I have a football qualifier for district selection next month. Will I be selected?"]], ["Farming and Rural Livelihood", ["Farming and Rural Livelihood: Will the coming season bring better income from farming?"]], ["General guidance", ["General guidance: Is it safe to travel next month?"]]];
+for(const [name,questions] of categories){const d=document.createElement('details'),s=document.createElement('summary');s.textContent=`${name} (${questions.length})`;d.append(s);for(const q of questions){const b=document.createElement('button');b.className='outline';b.textContent=q;b.onclick=()=>{$('question').value=b.textContent;controls();$('question').focus()};d.append(b)}$('categories').append(d)}
+try{const {initializeApp}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js');const {getAuth,browserLocalPersistence,setPersistence,onAuthStateChanged}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');const firebaseApp=initializeApp(firebaseConfig);initializeWebsiteAppCheck(firebaseApp);auth=getAuth(firebaseApp);await setPersistence(auth,browserLocalPersistence);let started=false;onAuthStateChanged(auth,async current=>{if(exiting)return;user=current;if(!current){$('app').hidden=true;location.replace('login.html');return}if(!active()){void exit();return}check();if(started)return;started=true;if(!/^[a-zA-Z0-9-]{12,80}$/.test(profileId||'')){location.replace('profile.html');return}try{const data=await request('/v1/cloud/profiles');records=data.records;profile=records.find(r=>r.profile.id===profileId)?.profile;if(!profile){location.replace('profile.html');return}const title=document.createElement('h2'),info=document.createElement('p');if(profile.nickname)title.dataset.languagePrivate='true';title.textContent=profile.nickname||'Private Profile';info.className='answer';info.textContent=`Date of birth: ${formatBirthDate(profile.birthDate)}\nBirth time: ${formatBirthTime(profile.birthTime)}\nPlace of birth city name: ${profile.birthPlace}`;$('profile').replaceChildren(title,info);historyView();const w=await request('/v1/web/wallet');displayPrice(w.priceInr);wallet(w.availableQuestions);setupWebsitePayments({getUser:()=>user,active,request,wallet,button:$('payment'),status:$('payment-status'),ready:w.paymentsReady===true});pendingKey=`astroask-website-request:${user.uid}:${profileId}`;pending=sessionStorage.getItem(pendingKey)||'';answer('');await restoreCloudRequest();if(pending)$('recover').hidden=false;$('loading').hidden=true;$('app').hidden=false;controls();await reloadHistory();if(pending)await recover()}catch(e){if(!active()){void exit();return}$('loading').textContent=`Could not load the question screen: ${e.message}. Deploy the updated website backend, then reload.`}})}catch{$('loading').textContent='Sign-in could not load. Check your internet connection.'}
+</script></body></html>
