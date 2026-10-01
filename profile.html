@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#351c75"><title>Your Private Profile | AstroAskAQuestion</title>
+  <style>
+    * { box-sizing: border-box; } body { margin: 0; background: #fff8e7; color: #202020; font: 18px/1.5 Arial, sans-serif; }
+    main { max-width: 610px; padding: 24px 16px 48px; margin: auto; } h1 { font-size: 26px; line-height: 1.2; margin: 0 0 12px; }
+    h2 { font-size: 19px; margin: 18px 0 8px; } p { margin: 9px 0 18px; } .note { font-size: 18px; color: #202020; }
+    button, input, select { font: inherit; width: 100%; border-radius: 8px; padding: 12px 14px; }
+    button { border: 0; background: #6950a1; color: white; font-weight: 700; cursor: pointer; margin: 5px 0; border-radius: 999px; padding: 11px 16px; font-size: 16px; line-height: 1.5; }
+    button:disabled { opacity: .55; cursor: not-allowed; } .outline { background: transparent; border: 1px solid #847c8a; color: #6950a1; }
+    input, select { background: white; border: 2px solid #8174a5; color: #24124f; margin: 5px 0 14px; }
+    label { display: block; font-weight: 700; margin-top: 14px; } fieldset { border: 0; padding: 0; margin: 15px 0; }
+    legend { font-weight: 700; } .choice { display: inline-flex; align-items: center; width: auto; margin: 9px 20px 0 0; font-weight: normal; }
+    .choice input { width: auto; margin: 0 8px 0 0; } .card { background: #e6e0e9; border-radius: 14px; padding: 18px 16px; margin: 18px 0; } .card p { margin: 0 0 14px; } .card p:last-child { margin-bottom: 0; } .card strong { display: block; font-size: 16px; } .action-status { margin: 12px 0; } @media (max-width: 400px) { h1 { font-size: 25px; } }
+    .error { color: #9e1735; font-weight: 700; } #view[hidden], [hidden] { display: none !important; }
+    #birth-suggestions button, #city-suggestions button { text-align: left; background: white; color: #24124f; border: 1px solid #8174a5; font-weight: normal; }
+  </style>
+<style>
+/* Phone layouts, including iPhone safe areas and narrow Android screens. */
+@media screen {
+ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ body{overflow-wrap:anywhere}
+ main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}
+ main>*,section,form,fieldset,.card,.row>*{min-width:0;max-width:100%}
+ img,svg,video{max-width:100%;height:auto}
+ button,input,select,textarea{max-width:100%;min-width:0;font-size:16px}
+ button,summary{min-height:48px;white-space:normal;overflow-wrap:anywhere;line-height:1.4;touch-action:manipulation}
+ input:not([type=radio]):not([type=checkbox]),select{min-height:48px;width:100%}
+ .choice{min-height:44px;max-width:100%}
+ .row{display:flex;flex-wrap:wrap;gap:8px}
+ .row>button{flex:1 1 140px;width:auto}
+ .answer,.report,#report-text{overflow-wrap:anywhere;word-break:normal}
+ dialog{max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);overflow-y:auto}
+ @media(max-width:480px){
+  main{padding-top:max(20px,env(safe-area-inset-top))}
+  h1{font-size:clamp(22px,6vw,28px)}
+  .card{padding:16px 12px}
+  button{padding:12px 14px}
+ }
+ @media(max-width:400px){.row{flex-direction:column}.row>button{flex:none;width:100%}}
+}
+</style><style id="mobile-compatibility">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media screen and (max-width:700px){
+  body{overflow-wrap:anywhere}
+  img,svg,video,canvas,iframe{max-width:100%;height:auto}
+  header,nav,main,footer,section,article,.container,.header-container{min-width:0;max-width:100%}
+  input,select,textarea,button{max-width:100%;touch-action:manipulation}
+  button,summary,.play-button{min-height:44px}
+}
+@supports(padding:max(0px)){
+  header,nav,footer{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+}
+</style></head>
+<body><main>
+  <p id="loading" role="status">Checking your sign-in…</p>
+  <div id="view" hidden>
+    <section id="list" hidden>
+      <h1>YOUR PRIVATE PROFILE</h1>
+      <p class="note">Profiles are stored in the cloud and synchronized with your Google account after sign-in. Internet is required to restore profiles and astrology answers. Only the latest 20 answers per profile are stored in history.</p>
+      <h2>SELECT PROFILE</h2><div id="profiles"></div>
+      <button id="add" type="button">+ ADD ANOTHER PROFILE</button>
+      <div class="card" id="selected-card" hidden></div>
+      <button id="ask" type="button">ASK YOUR QUESTION</button>
+      <button id="kundli" type="button">GENERATE BASIC KUNDLI MATCHING REPORT</button>
+      <button id="delete-account" type="button">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button>
+      <button class="outline" id="edit" type="button">EDIT BIRTH DETAILS</button>
+      <a href="welcome.html"><button class="outline" type="button">HOME</button></a>
+      <button id="delete-profile" type="button">DELETE CLOUD PROFILE</button>
+      <p id="action-status" class="action-status" role="status" hidden></p>
+    </section>
+    <section id="create" hidden>
+      <h1>CREATE YOUR ASTROLOGY PROFILE</h1>
+      <p>Your Google account securely protects your profiles and wallet points. Your email address is not shown to other users.</p>
+      <button id="enter" type="button">ENTER BIRTH DETAILS</button>
+      <button class="outline" id="create-back" type="button">BACK</button>
+    </section>
+    <section id="details" hidden>
+      <h1>ENTER BIRTH DETAILS</h1>
+      <p class="note">Birth details will be saved to your Google account in the cloud.</p>
+      <form id="birth-form">
+        <label for="nickname">Profile name (optional)</label><input id="nickname" maxlength="80" placeholder="Me, Dad, Daughter…" autocomplete="off">
+        <label for="birth-date">Date of birth</label><input id="birth-date" type="date" required>
+        <label for="birth-time">Birth time</label><input id="birth-time" type="time" required>
+        <p class="note">If the exact birth time is unknown, enter the best approximate time you know.</p>
+        <label for="birth-place">Place of birth city name</label><input id="birth-place" autocomplete="off" required placeholder="Search and select a city"><div id="birth-suggestions"></div>
+        <fieldset><legend>Gender</legend><label class="choice"><input type="radio" name="gender" value="male" required>MALE</label><label class="choice"><input type="radio" name="gender" value="female">FEMALE</label></fieldset>
+        <label for="marital">Marital status</label><select id="marital" required><option value="">Select</option><option value="single">SINGLE</option><option value="married">MARRIED</option><option value="divorced">DIVORCED</option><option value="widowed">WIDOWED</option><option value="separated">SEPARATED</option></select>
+        <label for="city">Current city (optional)</label><input id="city" autocomplete="off" placeholder="Search and select a city"><div id="city-suggestions"></div>
+        <p id="form-error" class="error" role="alert"></p>
+        <button type="submit">REVIEW DETAILS</button>
+      </form><button class="outline" id="details-back" type="button">BACK</button>
+    </section>
+    <section id="confirm" hidden>
+      <h1>CONFIRM YOUR DETAILS</h1><p>Please check these carefully. A wrong birth date, time or place can change an astrology chart.</p>
+      <div id="review" class="card"></div>
+      <button id="save" type="button">SAVE PRIVATELY IN CLOUD</button>
+      <p id="save-error" class="error" role="alert"></p>
+      <button class="outline" id="confirm-back" type="button">EDIT DETAILS</button>
+    </section>
+    <section id="failure" hidden><h1>Profiles unavailable</h1><p id="failure-text" class="error"></p><button id="retry" type="button">RETRY</button><a href="welcome.html"><button class="outline" type="button">HOME</button></a></section>
+  </div>
+</main>
+<script type="module">
+import {startWebsiteLanguage} from "./website-language.mjs";
+const kundliButtonTranslations={
+  en:"GENERATE BASIC KUNDLI MATCHING REPORT",
+  as:"কুণ্ডলী মিলনৰ মৌলিক প্ৰতিবেদন সৃষ্টি কৰক",
+  bn:"মৌলিক কুণ্ডলী মিলন প্রতিবেদন তৈরি করুন",
+  doi:"मूल कुंडली मिलान रिपोर्ट बनाओ",
+  gu:"મૂળભૂત કુંડળી મેળાપ અહેવાલ બનાવો",
+  hi:"बुनियादी कुंडली मिलान रिपोर्ट बनाएं",
+  kn:"ಮೂಲ ಜಾತಕ ಹೊಂದಾಣಿಕೆ ವರದಿಯನ್ನು ರಚಿಸಿ",
+  kok:"मूल कुंडली जुळोवणी अहवाल तयार करात",
+  mai:"मूल कुंडली मिलान रिपोर्ट बनाउ",
+  ml:"അടിസ്ഥാന ജാതക പൊരുത്ത റിപ്പോർട്ട് തയ്യാറാക്കുക",
+  mni:"ꯃꯃꯥꯡꯒꯤ ꯄꯨꯟꯁꯤ ꯌꯥꯅꯕꯒꯤ ꯔꯤꯄꯣꯔꯠ ꯁꯦꯝꯃꯨ",
+  mr:"मूलभूत कुंडली जुळवणी अहवाल तयार करा",
+  ne:"आधारभूत कुण्डली मिलान प्रतिवेदन तयार गर्नुहोस्",
+  or:"ମୌଳିକ କୁଣ୍ଡଳୀ ମେଳନ ରିପୋର୍ଟ ତିଆରି କରନ୍ତୁ",
+  pa:"ਮੁੱਢਲੀ ਕੁੰਡਲੀ ਮਿਲਾਨ ਰਿਪੋਰਟ ਬਣਾਓ",
+  sa:"मूलकुण्डलीमेलनप्रतिवेदनं निर्मीयताम्",
+  sd:"بنيادي ڪنڊلي ميلاپ رپورٽ ٺاهيو",
+  ta:"அடிப்படை ஜாதகப் பொருத்த அறிக்கையை உருவாக்கு",
+  te:"ప్రాథమిక జాతక సరిపోలిక నివేదికను రూపొందించండి",
+  ur:"بنیادی کنڈلی میلان رپورٹ بنائیں"
+};
+const kundliButton=document.getElementById("kundli");
+if(kundliButton)kundliButton.dataset.languagePrivate="true";
+function updateKundliButtonLanguage(){
+  const code=localStorage.getItem("astroask-website-language")||"en";
+  if(kundliButton)kundliButton.textContent=kundliButtonTranslations[code]||kundliButtonTranslations.en;
+}
+updateKundliButtonLanguage();
+window.addEventListener("storage",event=>{if(event.key==="astroask-website-language")updateKundliButtonLanguage();});
+startWebsiteLanguage();
+  import { confirmAction, deleteWebsiteAccount } from "./website-actions.mjs";
+  const firebaseConfig = {
+  "apiKey": "AIzaSyBA4HhtLV4iGdTR5BJIGaar4jGLPsbBLAY",
+  "authDomain": "astroask-website.firebaseapp.com",
+  "projectId": "astroask-website",
+  "storageBucket": "astroask-website.firebasestorage.app",
+  "messagingSenderId": "916860375828",
+  "appId": "1:916860375828:web:617082973c4a8c0ff86801"
+};
+  const apiRoot = "https://astroask-website-backend.onrender.com";
+  const activityKey = "astroask-website-last-activity", timeoutMs = 15 * 60 * 1000;
+  const $ = id => document.getElementById(id);
+  const screens = ["list", "create", "details", "confirm", "failure"];
+  let auth, user, records = [], selected, draft, verifiedBirth = "", verifiedCity = "", timer, signOutInProgress = false;
+  let lastActivity = Number(localStorage.getItem(activityKey)) || 0;
+  function sessionActive() {
+    const timestamp = Number(localStorage.getItem(activityKey));
+    return Boolean(user && auth?.currentUser?.uid === user.uid && timestamp && Date.now() - timestamp < timeoutMs);
+  }
+  let currentScreen = "";
+  function show(name) {
+    if (name === "details" && currentScreen !== "details") history.pushState({ astroaskBirthDetails: true }, "", location.href);
+    currentScreen = name;
+    for (const screen of screens) $(screen).hidden = screen !== name; $("view").hidden = false; $("loading").hidden = true; }
+  async function exit() {
+    if (signOutInProgress) return;
+    signOutInProgress = true; $("view").hidden = true; $("loading").hidden = false; $("loading").textContent = "Signing out…";
+    clearTimeout(timer); localStorage.removeItem(activityKey);
+    try { const { signOut } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"); await signOut(auth); location.replace("login.html"); }
+    catch { $("loading").textContent = "Sign-out failed. Reload the page and try again."; signOutInProgress = false; }
+  }
+  function checkTimeout() {
+    if (!user || signOutInProgress) return;
+    lastActivity = Number(localStorage.getItem(activityKey)) || 0;
+    const remaining = timeoutMs - (Date.now() - lastActivity);
+    if (remaining <= 0 || !localStorage.getItem(activityKey)) { void exit(); return; }
+    clearTimeout(timer); timer = setTimeout(checkTimeout, remaining);
+  }
+  function activity() {
+    if (!user || signOutInProgress) return;
+    const now = Date.now(); if (now - lastActivity >= timeoutMs) { checkTimeout(); return; }
+    if (now - lastActivity < 1000) return;
+    lastActivity = now; localStorage.setItem(activityKey, String(now)); checkTimeout();
+  }
+  for (const event of ["pointerdown", "keydown", "scroll", "touchstart"]) window.addEventListener(event, activity, { passive: true });
+  window.addEventListener("focus", checkTimeout);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) checkTimeout(); });
+  window.addEventListener("storage", event => { if (event.key === activityKey) checkTimeout(); });
+  window.addEventListener("pageshow", event => { if (event.persisted) checkTimeout(); });
+  window.addEventListener("popstate", event => {
+    if (!sessionActive()) { void exit(); return; }
+    if (currentScreen === "confirm") { show("details"); return; }
+    if (currentScreen === "details") { records.length ? renderList() : show("create"); return; }
+    if (event.state?.astroaskProfileGuard) return;
+    location.replace("welcome.html");
+  });
+  async function request(path, options = {}) {
+    if (signOutInProgress || !sessionActive()) throw Error("Your login session has ended.");
+    checkTimeout();
+    const token = await user.getIdToken();
+    if (!sessionActive()) throw Error("Your login session has ended.");
+    const response = await fetch(apiRoot + path, { ...options, headers: { "Accept": "application/json", "Authorization": `Bearer ${token}`, ...(options.body ? { "Content-Type": "application/json" } : {}) } });
+    if (!sessionActive()) throw Error("Your login session has ended.");
+    const data = await response.json();
+    if (!response.ok) throw Error(data.error || `Cloud service returned HTTP ${response.status}.`);
+    return data;
+  }
+  function problem(error) { show("failure"); $("failure-text").textContent = `Could not load cloud profiles. ${error.message || "Check the website backend connection."} Please try again.`; }
+  async function loadProfiles() {
+    $("view").hidden = true; $("loading").hidden = false; $("loading").textContent = "Loading your cloud profiles…";
+    try {
+      const result = await request("/v1/cloud/profiles");
+      if (!sessionActive()) { void exit(); return; }
+      if (!Array.isArray(result.records)) throw Error("Invalid response from cloud service.");
+      records = result.records;
+      if (!records.length) { show("create"); return; }
+      selected = records.find(r => r.profile.id === selected?.profile.id) || records[0]; renderList();
+    } catch (error) { if (!sessionActive()) { void exit(); return; } problem(error); }
+  }
+  function detail(label, value) { const row = document.createElement("p"); const bold = document.createElement("strong"); bold.textContent = label; const span=document.createElement("span");if(value&&!/^(male|female|single|married|divorced|widowed|separated)$/i.test(value))span.dataset.languagePrivate="true";span.textContent=value || "Not set";row.append(bold,span); return row; }
+  function profileCard(profile, target) {
+    target.replaceChildren(detail("Profile", profile.nickname || "Private Profile"), detail("Date of birth", profile.birthDate), detail("Birth time", profile.birthTime), detail("Place of birth city name", profile.birthPlace), ...(profile.currentLocation ? [detail("Current city", profile.currentLocation)] : []), detail("Gender", profile.gender?.toUpperCase()), detail("Marital status", profile.maritalStatus?.toUpperCase()));
+  }
+  $("ask").addEventListener("click", () => { if (!sessionActive()) { void exit(); return; } if (selected) location.assign("ask.html?profile=" + encodeURIComponent(selected.profile.id)); });
+  function actionStatus(message) { $("action-status").textContent=message;$("action-status").hidden=false; }
+  $("kundli").onclick=()=>{if(!sessionActive()){void exit();return;}if(selected)location.assign("kundli.html?profile="+encodeURIComponent(selected.profile.id));};
+  let deleting=false;
+  $("delete-account").onclick=async()=>{if(deleting)return;deleting=true;try{await deleteWebsiteAccount({auth,active:sessionActive,request,exit,status:actionStatus});}finally{deleting=false;}};
+  $("delete-profile").onclick=async()=>{
+    if(deleting||!selected||!sessionActive())return;
+    const id=selected.profile.id,name=selected.profile.nickname||"Private Profile";
+    if(!await confirmAction("DELETE CLOUD PROFILE?",`Permanently delete ${name}, its past answers and matching reports? Your website account and wallet will remain.`))return;
+    deleting=true;$("delete-profile").disabled=true;actionStatus("Deleting your cloud profile…");
+    try{await request("/v1/cloud/profile/"+encodeURIComponent(id),{method:"DELETE"});selected=null;actionStatus("Cloud profile deleted.");await loadProfiles();}
+    catch(e){actionStatus("Profile was not deleted: "+e.message);}
+    finally{deleting=false;$("delete-profile").disabled=false;}
+  };
+  function renderList() {
+    $("profiles").replaceChildren();
+    for (const record of records) {
+      const button = document.createElement("button"); button.className = "outline";
+      button.dataset.languagePrivate = "true";
+      button.textContent = `${record.profile.id === selected?.profile.id ? "✓ " : ""}${record.profile.nickname || "Private Profile"}`;
+      button.addEventListener("click", () => { selected = record; renderList(); }); $("profiles").append(button);
+    }
+    $("selected-card").hidden = !selected;
+    if (selected) profileCard(selected.profile, $("selected-card"));
+    show("list");
+  }
+  function edit(profile) {
+    draft = profile ? { ...profile } : { id: crypto.randomUUID(), nickname: "", birthDate: "", birthTime: "", birthPlace: "", birthPlaceApi: "", currentLocation: "", currentLocationApi: "", gender: "", maritalStatus: "", exactTimeUnknown: false };
+    $("nickname").value = draft.nickname || ""; $("birth-date").value = draft.birthDate || ""; $("birth-time").value = draft.birthTime || "";
+    $("birth-place").value = draft.birthPlace || ""; $("city").value = draft.currentLocation || "";
+    verifiedBirth = draft.birthPlaceApi || ""; verifiedCity = draft.currentLocationApi || "";
+    $("marital").value = draft.maritalStatus || "";
+    for (const input of document.querySelectorAll('input[name="gender"]')) input.checked = input.value === draft.gender;
+    $("form-error").textContent = ""; $("birth-suggestions").replaceChildren(); $("city-suggestions").replaceChildren(); show("details");
+  }
+  const normalizeCityName = value => value.replace(/^\s*b[ae]ngaluru(?=\s*(?:,|$))/i, "Bangalore");
+  function citySearch(inputId, suggestionsId, isBirth) {
+    const input = $(inputId), suggestions = $(suggestionsId);
+    let controller, debounce;
+    input.addEventListener("input", () => {
+      if (isBirth) verifiedBirth = ""; else verifiedCity = "";
+      suggestions.replaceChildren(); clearTimeout(debounce); controller?.abort();
+      input.value = normalizeCityName(input.value);
+      const query = input.value.trim(); if (query.length < 3) return;
+      debounce = setTimeout(async () => {
+        controller = new AbortController();
+        try {
+          const date = $("birth-date").value;
+          const data = await request(`/v1/location/search?place=${encodeURIComponent(query)}&date=${encodeURIComponent(date)}`, { signal: controller.signal });
+          if (input.value.trim() !== query) return;
+          for (const row of (data.locations || []).slice(0, 5)) {
+            const candidate = { ...row, placeName: normalizeCityName(row.placeName), displayName: normalizeCityName(row.displayName || row.placeName) };
+            const button = document.createElement("button"); button.type = "button"; button.textContent = candidate.displayName || candidate.placeName;
+            button.addEventListener("click", () => {
+              input.value = candidate.displayName || candidate.placeName;
+              if (isBirth) verifiedBirth = candidate.placeName; else verifiedCity = candidate.placeName;
+              suggestions.replaceChildren(); $("form-error").textContent = "";
+            }); suggestions.append(button);
+          }
+        } catch (error) { if (error.name !== "AbortError") $("form-error").textContent = `City search is unavailable: ${error.message}`; }
+      }, 350);
+    });
+  }
+  citySearch("birth-place", "birth-suggestions", true); citySearch("city", "city-suggestions", false);
+  $("add").addEventListener("click", () => edit(null));
+  $("enter").addEventListener("click", () => edit(null));
+  $("edit").addEventListener("click", () => edit(selected.profile));
+  $("create-back").addEventListener("click", () => location.assign("welcome.html"));
+  $("details-back").addEventListener("click", () => records.length ? renderList() : show("create"));
+  $("confirm-back").addEventListener("click", () => show("details"));
+  $("retry").addEventListener("click", () => void loadProfiles());
+  $("birth-form").addEventListener("submit", event => {
+    event.preventDefault();
+    const error = !verifiedBirth ? "Please search and select the exact birthplace." : $("city").value.trim() && !verifiedCity ? "Please search and select the exact current city." : "";
+    $("form-error").textContent = error; if (error) return;
+    draft = { ...draft, nickname: $("nickname").value.trim(), birthDate: $("birth-date").value, birthTime: $("birth-time").value, birthPlace: $("birth-place").value.trim(), birthPlaceApi: verifiedBirth, currentLocation: $("city").value.trim(), currentLocationApi: verifiedCity, gender: document.querySelector('input[name="gender"]:checked').value, maritalStatus: $("marital").value, exactTimeUnknown: false };
+    profileCard(draft, $("review")); $("save-error").textContent = ""; show("confirm");
+  });
+  $("save").addEventListener("click", async () => {
+    const button = $("save"); button.disabled = true; $("save-error").textContent = "Saving in the cloud…";
+    try {
+      const old = records.find(r => r.profile.id === draft.id);
+      await request("/v1/cloud/profile", { method: "PUT", body: JSON.stringify({ profile: draft }) });
+      $("save-error").textContent = ""; selected = { profile: draft }; await loadProfiles();
+    } catch (error) { $("save-error").textContent = `Profile was not saved: ${error.message}`; }
+    finally { button.disabled = false; }
+  });
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js");
+    const { getAuth, browserLocalPersistence, onAuthStateChanged, setPersistence } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js");
+    const firebaseApp = initializeApp(firebaseConfig);
+    auth = getAuth(firebaseApp); await setPersistence(auth, browserLocalPersistence);
+    onAuthStateChanged(auth, current => {
+      if (signOutInProgress) return;
+      if (!current) { user = null; records = []; selected = null; $("view").hidden = true; location.replace("login.html"); return; }
+      user = current; lastActivity = Number(localStorage.getItem(activityKey)) || 0;
+      if (!lastActivity || Date.now() - lastActivity >= timeoutMs) { void exit(); return; }
+      history.pushState({ astroaskProfileGuard: true }, "", location.href);
+      checkTimeout(); void loadProfiles();
+    }, () => { $("loading").textContent = "Could not verify your sign-in."; });
+  } catch { $("loading").textContent = "Login could not load. Check your internet connection."; }
+</script>
+</body></html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#fff8e7"><title>Basic Kundli Matching Report | AstroAskAQuestion</title><style>
+*{box-sizing:border-box}body{margin:0;background:#fff8e7;color:#202020;font:18px/1.5 Arial,sans-serif}main{max-width:610px;margin:auto;padding:24px 16px 48px}h1{font-size:26px;line-height:1.2;margin:0 0 12px}h2{font-size:19px;margin:0 0 8px}p{margin:6px 0 12px}.card{background:#e6e0e9;border-radius:14px;padding:18px 16px;margin:14px 0}button,select{width:100%;font:700 16px/1.5 Arial,sans-serif;padding:10px 16px;border-radius:999px;border:0;background:#6950a1;color:white;margin:5px 0;cursor:pointer}.outline,summary{background:transparent;border:1px solid #847c8a;color:#6950a1}button:disabled{background:#e5ddcd;color:#999;cursor:not-allowed}.small{font-size:14px;line-height:1.4}.tips{font-size:14px;font-weight:700}textarea{width:100%;min-height:118px;resize:vertical;background:transparent;border:1px solid #847c8a;border-radius:4px;padding:14px;font:18px/1.5 Arial,sans-serif;color:#202020;margin-top:18px}select{background:transparent;color:#6950a1;border:1px solid #847c8a}summary{padding:9px 16px;border-radius:999px;font-size:16px;font-weight:700;cursor:pointer;margin:6px 0}details button{text-align:left;font-weight:400}.row{display:flex;gap:8px}.answer{white-space:pre-wrap;overflow-wrap:anywhere}dialog{max-width:420px;width:calc(100% - 32px);border:1px solid #847c8a;border-radius:14px;background:#fff8e7;padding:20px}dialog::backdrop{background:#0008}.history-item{margin:20px 0;padding-bottom:18px;border-bottom:1px solid #c7bdce}.error{color:#9e1735;font-weight:700}label{display:block;font-size:16px;font-weight:700}[hidden]{display:none!important}
+
+input{width:100%;background:transparent;color:#202020;border:1px solid #847c8a;border-radius:4px;padding:14px;font:18px/1.5 Arial,sans-serif;margin:6px 0 14px;min-width:0}.suggestions button{text-align:left;background:white;color:#24124f;border:1px solid #8174a5;font-weight:400;border-radius:8px}.person label{margin-top:12px}.report{white-space:pre-wrap;overflow-wrap:anywhere}#report h2{margin-top:16px}@media print{body{background:white}main{max-width:none;padding:0}#loading,#app>*:not(#report),#report-actions{display:none!important}#report{display:block!important;background:white;padding:0}.report{font-size:12pt}}
+</style><style>
+/* Phone layouts, including iPhone safe areas and narrow Android screens. */
+@media screen {
+ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ body{overflow-wrap:anywhere}
+ main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}
+ main>*,section,form,fieldset,.card,.row>*{min-width:0;max-width:100%}
+ img,svg,video{max-width:100%;height:auto}
+ button,input,select,textarea{max-width:100%;min-width:0;font-size:16px}
+ button,summary{min-height:48px;white-space:normal;overflow-wrap:anywhere;line-height:1.4;touch-action:manipulation}
+ input:not([type=radio]):not([type=checkbox]),select{min-height:48px;width:100%}
+ .choice{min-height:44px;max-width:100%}
+ .row{display:flex;flex-wrap:wrap;gap:8px}
+ .row>button{flex:1 1 140px;width:auto}
+ .answer,.report,#report-text{overflow-wrap:anywhere;word-break:normal}
+ dialog{max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);overflow-y:auto}
+ @media(max-width:480px){
+  main{padding-top:max(20px,env(safe-area-inset-top))}
+  h1{font-size:clamp(22px,6vw,28px)}
+  .card{padding:16px 12px}
+  button{padding:12px 14px}
+ }
+ @media(max-width:400px){.row{flex-direction:column}.row>button{flex:none;width:100%}}
+}
+</style><style id="mobile-compatibility">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media screen and (max-width:700px){
+  body{overflow-wrap:anywhere}
+  img,svg,video,canvas,iframe{max-width:100%;height:auto}
+  header,nav,main,footer,section,article,.container,.header-container{min-width:0;max-width:100%}
+  input,select,textarea,button{max-width:100%;touch-action:manipulation}
+  button,summary,.play-button{min-height:44px}
+}
+@supports(padding:max(0px)){
+  header,nav,footer{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+}
+</style></head><body><main><p id="loading" role="status">Checking your sign-in…</p><div id="app" hidden><h1 id="kundli-title">GENERATE BASIC KUNDLI MATCHING REPORT</h1><div class="card"><h2 id="balance">Wallet balance: loading…</h2></div><div class="card"><h2 id="point-price">One Kundli matching report point: loading…</h2><p id="points">Wallet points: loading…</p><button id="payment">PROCEED TO PAYMENT</button><p class="small">Razorpay TEST MODE: no real money is charged. Payment details are handled by Razorpay; this website does not store card details. One wallet point is deducted only after a valid matching report is saved.</p><p id="payment-status" role="status"></p></div><h2>Bride &amp; Groom Details</h2><form id="matching-form"><section class="card person"><h2>Bride Details</h2><label for="bride-name">Name</label><input id="bride-name" maxlength="80" required autocomplete="name"><label for="bride-date">Date of birth</label><input id="bride-date" type="date" required><label for="bride-time">Birth time</label><input id="bride-time" type="time" required><label for="bride-place">Place of birth city name</label><input id="bride-place" required autocomplete="off" placeholder="Search and select a city"><div id="bride-suggestions" class="suggestions" role="list" aria-label="Bride birth city suggestions"></div></section><section class="card person"><h2>Groom Details</h2><label for="groom-name">Name</label><input id="groom-name" maxlength="80" required autocomplete="name"><label for="groom-date">Date of birth</label><input id="groom-date" type="date" required><label for="groom-time">Birth time</label><input id="groom-time" type="time" required><label for="groom-place">Place of birth city name</label><input id="groom-place" required autocomplete="off" placeholder="Search and select a city"><div id="groom-suggestions" class="suggestions" role="list" aria-label="Groom birth city suggestions"></div></section><button id="generate" type="submit">GENERATE BASIC KUNDLI MATCHING REPORT</button></form><p id="status" role="status" aria-live="polite"></p><button id="recover" class="outline" hidden>CHECK FOR MY REPORT</button><section id="report" class="card" hidden><h2>Basic Kundli matching report</h2><p id="report-text" class="report"></p><div id="report-actions"><div class="row"><button id="share" class="outline">SHARE REPORT</button><button id="pdf" class="outline">SAVE REPORT AS PDF</button></div><button id="copy" class="outline">COPY</button><button id="clear" class="outline">CLEAR REPORT AND DETAILS</button></div></section><button id="back" class="outline">BACK TO PROFILE</button><button id="signout" class="outline">SIGN OUT</button><button id="delete-account">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button><p id="account-status" role="status"></p></div></main><script type="module">
+import {startWebsiteLanguage} from "./website-language.mjs";
+const kundliScreenCopy={
+  en:{title:"GENERATE BASIC KUNDLI MATCHING REPORT",point:"One Kundli matching report point: {0}",share:"SHARE REPORT"},
+  as:{title:"কুণ্ডলী মিলনৰ মৌলিক প্ৰতিবেদন সৃষ্টি কৰক",point:"কুণ্ডলী মিলনৰ প্ৰতিবেদনৰ বাবে এক পইণ্ট: {0}",share:"প্ৰতিবেদন শ্বেয়াৰ কৰক"},
+  bn:{title:"মৌলিক কুণ্ডলী মিলন প্রতিবেদন তৈরি করুন",point:"একটি কুণ্ডলী মিলন প্রতিবেদন পয়েন্ট: {0}",share:"প্রতিবেদন শেয়ার করুন"},
+  doi:{title:"मूल कुंडली मिलान रिपोर्ट बनाओ",point:"इक कुंडली मिलान रिपोर्ट दा इक पॉइंट: {0}",share:"रिपोर्ट साझा करो"},
+  gu:{title:"મૂળભૂત કુંડળી મેળાપ અહેવાલ બનાવો",point:"એક કુંડળી મેળાપ અહેવાલ પોઈન્ટ: {0}",share:"અહેવાલ શેર કરો"},
+  hi:{title:"बुनियादी कुंडली मिलान रिपोर्ट बनाएं",point:"एक कुंडली मिलान रिपोर्ट पॉइंट: {0}",share:"रिपोर्ट साझा करें"},
+  kn:{title:"ಮೂಲ ಜಾತಕ ಹೊಂದಾಣಿಕೆ ವರದಿಯನ್ನು ರಚಿಸಿ",point:"ಒಂದು ಜಾತಕ ಹೊಂದಾಣಿಕೆ ವರದಿ ಪಾಯಿಂಟ್: {0}",share:"ವರದಿಯನ್ನು ಹಂಚಿಕೊಳ್ಳಿ"},
+  kok:{title:"मूल कुंडली जुळोवणी अहवाल तयार करात",point:"एका कुंडली जुळोवणी अहवालाचो एक पॉइंट: {0}",share:"अहवाल वाटून घेवचो"},
+  mai:{title:"मूल कुंडली मिलान रिपोर्ट बनाउ",point:"एक कुंडली मिलान रिपोर्ट प्वाइंट: {0}",share:"रिपोर्ट साझा करू"},
+  ml:{title:"അടിസ്ഥാന ജാതക പൊരുത്ത റിപ്പോർട്ട് തയ്യാറാക്കുക",point:"ഒരു ജാതക പൊരുത്ത റിപ്പോർട്ട് പോയിന്റ്: {0}",share:"റിപ്പോർട്ട് പങ്കിടുക"},
+  mni:{title:"ꯃꯃꯥꯡꯒꯤ ꯄꯨꯟꯁꯤ ꯌꯥꯅꯕꯒꯤ ꯔꯤꯄꯣꯔꯠ ꯁꯦꯝꯃꯨ",point:"ꯑꯃꯥ ꯄꯨꯟꯁꯤ ꯌꯥꯅꯕꯒꯤ ꯔꯤꯄꯣꯔꯠ ꯄꯣꯏꯟꯠ: {0}",share:"ꯔꯤꯄꯣꯔꯠ ꯁꯥꯔ ꯇꯧꯕꯤꯌꯨ"},
+  mr:{title:"मूलभूत कुंडली जुळवणी अहवाल तयार करा",point:"एक कुंडली जुळवणी अहवाल पॉइंट: {0}",share:"अहवाल शेअर करा"},
+  ne:{title:"आधारभूत कुण्डली मिलान प्रतिवेदन तयार गर्नुहोस्",point:"एउटा कुण्डली मिलान प्रतिवेदन पोइन्ट: {0}",share:"प्रतिवेदन साझा गर्नुहोस्"},
+  or:{title:"ମୌଳିକ କୁଣ୍ଡଳୀ ମେଳନ ରିପୋର୍ଟ ତିଆରି କରନ୍ତୁ",point:"ଗୋଟିଏ କୁଣ୍ଡଳୀ ମେଳନ ରିପୋର୍ଟ ପଏଣ୍ଟ: {0}",share:"ରିପୋର୍ଟ ଅଂଶୀଦାର କରନ୍ତୁ"},
+  pa:{title:"ਮੁੱਢਲੀ ਕੁੰਡਲੀ ਮਿਲਾਨ ਰਿਪੋਰਟ ਬਣਾਓ",point:"ਇੱਕ ਕੁੰਡਲੀ ਮਿਲਾਨ ਰਿਪੋਰਟ ਪੁਆਇੰਟ: {0}",share:"ਰਿਪੋਰਟ ਸਾਂਝੀ ਕਰੋ"},
+  sa:{title:"मूलकुण्डलीमेलनप्रतिवेदनं निर्मीयताम्",point:"एकं कुण्डलीमेलनप्रतिवेदनस्य अङ्कः: {0}",share:"प्रतिवेदनं संविभज्यताम्"},
+  sd:{title:"بنيادي ڪنڊلي ميلاپ رپورٽ ٺاهيو",point:"هڪ ڪنڊلي ميلاپ رپورٽ پوائنٽ: {0}",share:"رپورٽ شيئر ڪريو"},
+  ta:{title:"அடிப்படை ஜாதகப் பொருத்த அறிக்கையை உருவாக்கு",point:"ஒரு ஜாதகப் பொருத்த அறிக்கை புள்ளி: {0}",share:"அறிக்கையைப் பகிர்"},
+  te:{title:"ప్రాథమిక జాతక సరిపోలిక నివేదికను రూపొందించండి",point:"ఒక జాతక సరిపోలిక నివేదిక పాయింట్: {0}",share:"నివేదికను పంచుకోండి"},
+  ur:{title:"بنیادی کنڈلی میلان رپورٹ بنائیں",point:"ایک کنڈلی میلان رپورٹ پوائنٹ: {0}",share:"رپورٹ شیئر کریں"}
+};
+let kundliPointPrice="loading…";
+for(const id of ["kundli-title","point-price","generate","share"]){const element=document.getElementById(id);if(element)element.dataset.languagePrivate="true";}
+function updateKundliScreenLanguage(){
+  const code=localStorage.getItem("astroask-website-language")||"en";
+  const copy=kundliScreenCopy[code]||kundliScreenCopy.en;
+  document.getElementById("kundli-title").textContent=copy.title;
+  document.getElementById("generate").textContent=copy.title;
+  document.getElementById("point-price").textContent=copy.point.replace("{0}",kundliPointPrice);
+  document.getElementById("share").textContent=copy.share;
+}
+updateKundliScreenLanguage();
+window.addEventListener("storage",event=>{if(event.key==="astroask-website-language")updateKundliScreenLanguage();});
+startWebsiteLanguage();
+import {setupWebsitePayments} from "./website-payments.mjs";
+import {confirmAction,deleteWebsiteAccount} from './website-actions.mjs';
+const firebaseConfig={
+  "apiKey": "AIzaSyBA4HhtLV4iGdTR5BJIGaar4jGLPsbBLAY",
+  "authDomain": "astroask-website.firebaseapp.com",
+  "projectId": "astroask-website",
+  "storageBucket": "astroask-website.firebasestorage.app",
+  "messagingSenderId": "916860375828",
+  "appId": "1:916860375828:web:617082973c4a8c0ff86801"
+};
+const kundliSignOutCopy={
+  en:["SIGN OUT?","Are you sure you want to sign out?","NO","YES"],
+  as:["ছাইন আউট কৰিবনে?","আপুনি নিশ্চিতভাৱে ছাইন আউট কৰিব বিচাৰেনে?","নহয়","হয়"],
+  bn:["সাইন আউট করবেন?","আপনি কি নিশ্চিত যে সাইন আউট করতে চান?","না","হ্যাঁ"],
+  doi:["साइन आउट करना ऐ?","क्या तुस पक्का साइन आउट करना चांह्दे ओ?","नेईं","हां"],
+  gu:["સાઇન આઉટ કરવું છે?","શું તમે ખરેખર સાઇન આઉટ કરવા માંગો છો?","ના","હા"],
+  hi:["साइन आउट करें?","क्या आप वाकई साइन आउट करना चाहते हैं?","नहीं","हाँ"],
+  kn:["ಸೈನ್ ಔಟ್ ಮಾಡಬೇಕೇ?","ನೀವು ಖಚಿತವಾಗಿ ಸೈನ್ ಔಟ್ ಮಾಡಲು ಬಯಸುವಿರಾ?","ಬೇಡ","ಹೌದು"],
+  kok:["सायन आउट करचें?","तुमी खात्रीन सायन आउट करपाक सोदतात?","ना","हय"],
+  mai:["साइन आउट करी?","की अहाँ निश्चित छी जे साइन आउट करय चाहैत छी?","नहि","हँ"],
+  ml:["സൈൻ ഔട്ട് ചെയ്യണോ?","സൈൻ ഔട്ട് ചെയ്യണമെന്ന് ഉറപ്പാണോ?","വേണ്ട","അതെ"],
+  mni:["ꯁꯥꯏꯟ ꯑꯥꯎꯠ ꯇꯧꯕ꯭ꯔꯥ?","ꯁꯥꯏꯟ ꯑꯥꯎꯠ ꯇꯧꯕꯥ ꯅꯤꯡꯁꯤꯡꯕ꯭ꯔꯥ?","ꯅꯠꯇꯦ","ꯍꯣꯏ"],
+  mr:["साइन आउट करायचे?","तुम्हाला नक्की साइन आउट करायचे आहे का?","नाही","होय"],
+  ne:["साइन आउट गर्ने?","के तपाईं साइन आउट गर्न निश्चित हुनुहुन्छ?","होइन","हो"],
+  or:["ସାଇନ୍ ଆଉଟ୍ କରିବେ?","ଆପଣ ନିଶ୍ଚିତ ଭାବେ ସାଇନ୍ ଆଉଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?","ନା","ହଁ"],
+  pa:["ਸਾਈਨ ਆਉਟ ਕਰਨਾ ਹੈ?","ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਸਾਈਨ ਆਉਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?","ਨਹੀਂ","ਹਾਂ"],
+  sa:["निर्गच्छामः किम्?","भवान् निश्चयेन निर्गन्तुम् इच्छति किम्?","न","आम्"],
+  sd:["سائن آئوٽ ڪجي؟","ڇا توهان کي پڪ آهي ته سائن آئوٽ ڪرڻ چاهيو ٿا؟","نه","ها"],
+  ta:["வெளியேறவா?","நிச்சயமாக வெளியேற விரும்புகிறீர்களா?","இல்லை","ஆம்"],
+  te:["సైన్ అవుట్ చేయాలా?","మీరు ఖచ్చితంగా సైన్ అవుట్ చేయాలనుకుంటున్నారా?","వద్దు","అవును"],
+  ur:["سائن آؤٹ کریں؟","کیا آپ واقعی سائن آؤٹ کرنا چاہتے ہیں؟","نہیں","ہاں"]
+};
+function confirmKundliSignOut(){
+  const code=localStorage.getItem("astroask-website-language")||"en";
+  const [title,message,no,yes]=kundliSignOutCopy[code]||kundliSignOutCopy.en;
+  return new Promise(resolve=>{
+    const dialog=document.createElement("dialog"),heading=document.createElement("h2"),text=document.createElement("p"),row=document.createElement("div");
+    dialog.dataset.languagePrivate="true";heading.textContent=title;text.textContent=message;row.style.display="flex";row.style.gap="8px";
+    Object.assign(dialog.style,{maxWidth:"420px",width:"calc(100% - 32px)",border:"1px solid #847c8a",borderRadius:"14px",background:"#fff8e7",padding:"20px"});
+    let done=false;const finish=value=>{if(done)return;done=true;dialog.close();dialog.remove();resolve(value)};
+    for(const [label,value] of [[no,false],[yes,true]]){const button=document.createElement("button");button.type="button";button.textContent=label;button.onclick=()=>finish(value);row.append(button);}
+    dialog.oncancel=event=>{event.preventDefault();finish(false)};dialog.append(heading,text,row);document.body.append(dialog);dialog.showModal();
+  });
+}
+const apiRoot='https://astroask-website-backend.onrender.com',activityKey='astroask-website-last-activity',timeoutMs=15*60*1000,$=id=>document.getElementById(id);
+let auth,user,profile,records=[],balance=0,busy=false,pending='',pendingKey='',exiting=false,timer;
+const profileId=new URL(location.href).searchParams.get('profile');
+function active(){const at=Number(localStorage.getItem(activityKey));return Boolean(user&&auth?.currentUser?.uid===user.uid&&!exiting&&at&&Date.now()-at<timeoutMs)}
+async function exit(){if(exiting)return;exiting=true;$('app').hidden=true;$('loading').hidden=false;$('loading').textContent='Signing out…';clearTimeout(timer);localStorage.removeItem(activityKey);try{const {signOut}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');await signOut(auth)}finally{location.replace('login.html')}}
+function check(){if(!user||exiting)return;if(!active()){void exit();return}clearTimeout(timer);timer=setTimeout(check,Math.max(1,timeoutMs-(Date.now()-Number(localStorage.getItem(activityKey)))))}
+function activity(){if(!active()){check();return}const now=Date.now();if(now-Number(localStorage.getItem(activityKey))>1000)localStorage.setItem(activityKey,String(now));check()}
+for(const event of ['pointerdown','keydown','scroll','touchstart'])window.addEventListener(event,activity,{passive:true});window.addEventListener('storage',e=>{if(e.key===activityKey||e.key===null)check()});window.addEventListener('focus',check);document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});window.addEventListener('pageshow',()=>check());
+async function request(path,options={}){if(!active())throw Error('Your session has ended.');const token=await user.getIdToken();if(!active())throw Error('Your session has ended.');const controller=new AbortController(),cancel=()=>controller.abort();options.signal?.addEventListener('abort',cancel,{once:true});if(options.signal?.aborted)controller.abort();const timeout=setTimeout(cancel,60000);let r;try{r=await fetch(apiRoot+path,{...options,signal:controller.signal,headers:{Authorization:`Bearer ${token}`,...(options.body?{'Content-Type':'application/json'}:{})}});}finally{clearTimeout(timeout);options.signal?.removeEventListener('abort',cancel);}if(!active())throw Error('Your session has ended.');const data=await r.json();if(!r.ok){if(r.status===401)void exit();const e=Error(data.error||`Cloud service returned HTTP ${r.status}`);e.status=r.status;throw e}return data}
+function status(message,error=false){$('status').textContent=message;$('status').className=error?'error':''}
+
+const verified={bride:'',groom:''};
+const normalizeCityName=value=>value.replace(/^\s*b[ae]ngaluru(?=\s*(?:,|$))/i,'Bangalore');
+function controls(){ $('generate').disabled=busy||Boolean(pending)||balance<1;for(const field of $('matching-form').querySelectorAll('input'))field.disabled=busy||Boolean(pending);$('clear').disabled=busy||Boolean(pending);$('delete-account').disabled=busy; }
+function wallet(points){balance=Number(points)||0;$('balance').textContent=`Wallet balance: ${balance} points`;$('points').textContent=`Wallet points: ${balance}`;controls()}
+function price(value){const amount=Number(value);if(value==null||!Number.isFinite(amount)||amount<=0)throw Error('Website price is not configured');const text='₹'+amount.toFixed(2);kundliPointPrice=text;updateKundliScreenLanguage();$("payment").textContent='PROCEED TO PAYMENT • '+text;}
+for(const who of ['bride','groom']){
+ const input=$(who+'-place'),suggestions=$(who+'-suggestions');let controller,debounce,sequence=0;
+ $(who+'-date').max=new Date().toISOString().slice(0,10);
+ input.addEventListener('input',()=>{
+  verified[who]='';suggestions.replaceChildren();clearTimeout(debounce);controller?.abort();const serial=++sequence;
+  input.value=normalizeCityName(input.value);const query=input.value.trim();if(query.length<3)return;
+  debounce=setTimeout(async()=>{controller=new AbortController();try{
+   const data=await request('/v1/location/search?place='+encodeURIComponent(query)+'&date='+encodeURIComponent($(who+'-date').value),{signal:controller.signal});
+   if(serial!==sequence||input.value.trim()!==query)return;
+   for(const row of (data.locations||[]).slice(0,5)){const place=normalizeCityName(row.placeName),display=normalizeCityName(row.displayName||row.placeName);const button=document.createElement('button');button.type='button';button.textContent=display;button.onclick=()=>{input.value=display;verified[who]=place;sequence++;suggestions.replaceChildren();status('');};suggestions.append(button);}
+   if(!suggestions.children.length)status('No matching city found. Try another spelling.',true);
+  }catch(e){if(e.name!=='AbortError'&&serial===sequence)status('City search is unavailable: '+e.message,true);}},350);
+ });
+}
+function person(who){const date=$(who+'-date').value,time=$(who+'-time').value;
+ if(!$(who+'-name').value.trim()||!date||!time||!verified[who])throw Error(who[0].toUpperCase()+who.slice(1)+' Details: enter the name, date, time and select a birth city suggestion.');
+ const [year,month,day]=date.split('-').map(Number),[hour,min]=time.split(':').map(Number);
+ return {day,month,year,hour,min,place:verified[who]};
+}
+const reportLabels={"as": ["কুণ্ডলী মিলন", "অষ্টকূট পইণ্ট", "অষ্টকূট", "সামগ্ৰিক"], "bn": ["কুণ্ডলী মিলন", "অষ্টকূট নম্বর", "অষ্টকূট", "সামগ্রিক"], "doi": ["कुंडली मिलान", "अष्टकूट अंक", "अष्टकूट", "समग्र"], "gu": ["કુંડળી મિલન", "અષ્ટકૂટ પોઈન્ટ", "અષ્ટકૂટ", "એકંદર"], "hi": ["कुंडली मिलान", "अष्टकूट अंक", "अष्टकूट", "समग्र"], "kn": ["ಕುಂಡಲಿ ಹೊಂದಾಣಿಕೆ", "ಅಷ್ಟಕೂಟ ಅಂಕಗಳು", "ಅಷ್ಟಕೂಟ", "ಒಟ್ಟಾರೆ"], "kok": ["कुंडली मेळावणी", "अष्टकूट गुण", "अष्टकूट", "एकंदर"], "mai": ["कुण्डली मिलान", "अष्टकूट अंक", "अष्टकूट", "समग्र"], "ml": ["ജാതക പൊരുത്തം", "അഷ്ടകൂട പോയിന്റുകൾ", "അഷ്ടകൂടം", "മൊത്തത്തിൽ"], "mni": ["ꯀꯨꯟꯗꯂꯤ ꯃꯤꯂꯥꯟ", "ꯑꯁꯇꯀꯨꯠ ꯄꯣꯏꯟꯠ", "ꯑꯁꯇꯀꯨꯠ", "ꯃꯄꯨꯡ"], "ma": ["कुंडली जुळणी", "अष्टकूट गुण", "अष्टकूट", "एकूण"], "mr": ["कुंडली जुळणी", "अष्टकूट गुण", "अष्टकूट", "एकूण"], "ne": ["कुण्डली मिलान", "अष्टकूट अंक", "अष्टकूट", "समग्र"], "or": ["କୁଣ୍ଡଳୀ ମିଳନ", "ଅଷ୍ଟକୂଟ ପଏଣ୍ଟ", "ଅଷ୍ଟକୂଟ", "ସାମଗ୍ରିକ"], "pa": ["ਕੁੰਡਲੀ ਮਿਲਾਨ", "ਅਸ਼ਟਕੂਟ ਅੰਕ", "ਅਸ਼ਟਕੂਟ", "ਸਮੁੱਚਾ"], "sa": ["कुण्डलीमेलनम्", "अष्टकूट-अङ्काः", "अष्टकूटम्", "समग्रः"], "sd": ["ڪنڊلي ملان", "اشٽڪوٽ پوائنٽ", "اشٽڪوٽ", "مجموعي"], "ta": ["ஜாதகப் பொருத்தம்", "அஷ்டகூட மதிப்பெண்கள்", "அஷ்டகூடம்", "ஒட்டுமொத்தம்"], "te": ["కుండలి సరిపోలిక", "అష్టకూట పాయింట్లు", "అష్టకూట", "మొత్తం"], "ur": ["کنڈلی ملان", "اشٹکُوٹ پوائنٹس", "اشٹکُوٹ", "مجموعی"], "en": ["Kundli Milan", "Ashtakoota points", "Ashtakoota", "Overall"]};
+const factorLabels={"as": ["বৰ্ণ", "বশ্য", "তৰা", "যোনি", "মৈত্ৰী", "গণ", "ভকূট", "নাড়ী"], "bn": ["বর্ণ", "বশ্য", "তারা", "যোনি", "মৈত্রী", "গণ", "ভকূট", "নাড়ি"], "gu": ["વર્ણ", "વશ્ય", "તારા", "યોનિ", "મૈત્રી", "ગણ", "ભકૂટ", "નાડી"], "hi": ["वर्ण", "वश्य", "तारा", "योनि", "मैत्री", "गण", "भकूट", "नाड़ी"], "mai": ["वर्ण", "वश्य", "तारा", "योनि", "मैत्री", "गण", "भकूट", "नाड़ी"], "ne": ["वर्ण", "वश्य", "तारा", "योनि", "मैत्री", "गण", "भकूट", "नाड़ी"], "kn": ["ವರ್ಣ", "ವಶ್ಯ", "ತಾರಾ", "ಯೋನಿ", "ಮೈತ್ರಿ", "ಗಣ", "ಭಕೂಟ್", "ನಾಡಿ"], "kok": ["वर्ण", "वश्य", "तारा", "योनी", "मैत्री", "गण", "भकूट", "नाडी"], "ml": ["വർണ്ണം", "വശ്യം", "താര", "യോനി", "മൈത്രി", "ഗണം", "ഭകൂട്ട്", "നാഡി"], "mni": ["ꯋꯔꯟ", "ꯋꯁꯌ", "ꯇꯥꯔꯥ", "ꯌꯣꯅꯤ", "ꯃꯩꯇ꯭ꯔꯤ", "ꯒꯟ", "ꯐꯀꯨꯠ", "ꯅꯥꯗꯤ"], "ma": ["वर्ण", "वश्य", "तारा", "योनी", "मैत्री", "गण", "भकूट", "नाडी"], "mr": ["वर्ण", "वश्य", "तारा", "योनी", "मैत्री", "गण", "भकूट", "नाडी"], "or": ["ବର୍ଣ୍ଣ", "ବଶ୍ୟ", "ତାରା", "ଯୋନି", "ମୈତ୍ରୀ", "ଗଣ", "ଭକୂଟ", "ନାଡ଼ି"], "pa": ["ਵਰਨ", "ਵਸ਼ਯ", "ਤਾਰਾ", "ਯੋਨੀ", "ਮੈਤਰੀ", "ਗਣ", "ਭਕੂਟ", "ਨਾੜੀ"], "sa": ["वर्णः", "वश्यः", "तारा", "योनिः", "मैत्री", "गणः", "भकूटः", "नाडी"], "sd": ["ورن", "وش", "تارا", "يوني", "مئتري", "گڻ", "ڀڪُٽ", "ناڙي"], "ta": ["வர்ணம்", "வசியம்", "தாரை", "யோனி", "மைத்ரி", "கணம்", "பகூட்", "நாடி"], "te": ["వర్ణ", "వశ్య", "తార", "యోని", "మైత్రి", "గణ", "భకూట్", "నాడి"], "ur": ["ورن", "وشیہ", "تارا", "یونی", "میتری", "گن", "بھکوٹ", "ناڑی"], "en": ["Varna", "Vashya", "Tara", "Yoni", "Maitri", "Gana", "Bhakut", "Nadi"]};
+
+const doshaLabels={"manglik": {"as": "মঙ্গলিক", "bn": "মাঙ্গলিক", "hi": "मांगलिक", "doi": "मांगलिक", "mai": "मांगलिक", "ne": "मांगलिक", "gu": "માંગલિક", "kn": "ಮಾಂಗಲಿಕ", "ml": "മാംഗ്ലിക്", "ma": "मंगळिक", "mr": "मंगळिक", "or": "ମାଙ୍ଗଳିକ", "pa": "ਮੰਗਲਿਕ", "sa": "माङ्गलिकः", "ta": "மாங்கலிக்", "te": "మాంగలిక్", "ur": "مانگلک", "kok": "मांगलिक", "mni": "ꯃꯥꯡꯒꯂꯤꯛ", "sd": "منگلڪ", "en": "Manglik"}, "rajju_dosha": {"as": "ৰজ্জু দোষ", "bn": "রাজ্জু দোষ", "hi": "रज्जु दोष", "doi": "रज्जु दोष", "mai": "रज्जु दोष", "ne": "रज्जु दोष", "gu": "રજ્જુ દોષ", "kn": "ರಾಜ್ಜು ದೋಷ", "ml": "രജ്ജു ദോഷം", "ma": "रज्जू दोष", "mr": "रज्जू दोष", "or": "ରଜ୍ଜୁ ଦୋଷ", "pa": "ਰੱਜੂ ਦੋਸ਼", "sa": "रज्जुदोषः", "ta": "ரஜ்ஜு தோஷம்", "te": "రజ్జు దోషం", "ur": "رجو دوش", "kok": "राज्जू दोष", "mni": "ꯔꯥꯖ꯭ꯖꯨ ꯗꯣꯁ", "sd": "راجو دوش", "en": "Rajju dosha"}, "vedha_dosha": {"as": "বেধা দোষ", "bn": "বেধা দোষ", "hi": "वेध दोष", "doi": "वेध दोष", "mai": "वेध दोष", "ne": "वेध दोष", "gu": "વેધ દોષ", "kn": "ವೇಧ ದೋಷ", "ml": "വേധ ദോഷം", "ma": "वेध दोष", "mr": "वेध दोष", "or": "ବେଧ ଦୋଷ", "pa": "ਵੇਧ ਦੋਸ਼", "sa": "वेधदोषः", "ta": "வேத தோஷம்", "te": "వేధ దోషం", "ur": "ویدھ دوش", "kok": "वेध दोष", "mni": "ꯋꯦꯙꯥ ꯗꯣꯁ", "sd": "ويدھ دوش", "en": "Vedha dosha"}};
+const yesNo={"as": ["হয়", "নহয়"], "bn": ["হ্যাঁ", "না"], "doi": ["हाँ", "नहीं"], "hi": ["हाँ", "नहीं"], "mai": ["हाँ", "नहीं"], "ne": ["हाँ", "नहीं"], "gu": ["હા", "ના"], "kn": ["ಹೌದು", "ಇಲ್ಲ"], "kok": ["होय", "नाही"], "ma": ["होय", "नाही"], "mr": ["होय", "नाही"], "ml": ["അതെ", "ഇല്ല"], "mni": ["ꯍꯥꯎ", "ꯅꯠꯇꯦ"], "or": ["ହଁ", "ନାହିଁ"], "pa": ["ਹਾਂ", "ਨਹੀਂ"], "sa": ["आम्", "न"], "sd": ["ها", "نه"], "ta": ["ஆம்", "இல்லை"], "te": ["అవును", "కాదు"], "ur": ["ہاں", "نہیں"], "en": ["Yes", "No"]};
+function report(data){if(!data){$('report').hidden=true;$('report-text').textContent='';return;}
+ const language=data.reportLanguage||'en',labels=reportLabels[language]||reportLabels.en,factors=factorLabels[language]||factorLabels.en,total=data.ashtakoota?.total;
+ if(!total)throw Error('Matching score is missing.');
+ const lines=[`${labels[0]} — ${total.received_points}/${total.total_points} ${labels[1]}`];
+ ['varna','vashya','tara','yoni','maitri','gan','bhakut','nadi'].forEach((key,index)=>{const f=data.ashtakoota[key];if(f)lines.push(`${factors[index]}: ${f.received_points}/${f.total_points}${f.description?' — '+f.description:''}`)});
+ if(data.ashtakoota.conclusion?.report)lines.push('\n'+labels[2]+': '+data.ashtakoota.conclusion.report);
+ if(data.conclusion?.match_report)lines.push('\n'+labels[3]+': '+data.conclusion.match_report);
+ for(const [key,label] of [['manglik','Manglik'],['rajju_dosha','Rajju dosha'],['vedha_dosha','Vedha dosha']])if(data[key])lines.push((doshaLabels[key][language]||label)+': '+(yesNo[language]||yesNo.en)[data[key].status?0:1]);
+ $('report-text').textContent=lines.join('\n');$('report').hidden=false;
+}
+function clearPending(){clearTimeout(recoveryTimer);pending='';sessionStorage.removeItem(pendingKey);$('recover').hidden=true;controls()}
+let recoveryTimer;
+function scheduleRecovery(){clearTimeout(recoveryTimer);if(pending&&active())recoveryTimer=setTimeout(()=>{if(active()&&!busy)void recover();else scheduleRecovery();},5000);}
+async function restoreCloudRequest(){
+ if(!active())return;
+ const saved=await request('/v1/web/recovery?profileId='+encodeURIComponent(profileId));
+ const record=saved.kundli;
+ if(record){pending=record.requestId;sessionStorage.setItem(pendingKey,pending);$('recover').hidden=false;}
+}
+window.addEventListener('online',()=>{if(active()&&!busy){if(pending)void recover();else void restoreCloudRequest().then(()=>pending?recover():null).catch(e=>status(e.message,true));}});
+window.addEventListener('focus',()=>{if(active()&&pending&&!busy)void recover();});
+async function recover(){if(!pending)return;busy=true;controls();try{
+ const data=await request('/v1/web/kundli/report?requestId='+encodeURIComponent(pending));
+ if(data.profileId!==profileId){clearPending();throw Error('A report for another profile is processing. Open that profile to recover it.');}
+ wallet(data.availableQuestions);
+ if(data.status==='completed'){report(data.report);clearPending();status('Your saved report was recovered.');}
+ else if(data.status==='failed'){clearPending();status('The report failed or expired. Your point was not deducted.',true);}
+ else status('Your report is processing. Check again shortly.');
+ }catch(e){if(e.status===404){clearPending();status('No saved request was found. You can generate a report.',true);}else status(e.message,true);}
+ finally{busy=false;controls();scheduleRecovery();}
+}
+$('matching-form').onsubmit=async event=>{event.preventDefault();if($('generate').disabled)return;
+ let bride,groom;try{bride=person('bride');groom=person('groom');}catch(e){status(e.message,true);return;}
+ busy=true;pending=crypto.randomUUID();sessionStorage.setItem(pendingKey,pending);report(null);controls();status('Generating your matching report. Please keep this page open…');
+ try{const data=await request('/v1/web/kundli/report',{method:'POST',body:JSON.stringify({requestId:pending,profileId,bride,groom,language:localStorage.getItem('astroask-website-language')||'en'})});if(data.status==='processing'){wallet(data.availableQuestions);$('recover').hidden=false;status('Your matching request is saved in the cloud and is processing. You can return later to get the report.');}else{report(data.report);wallet(data.availableQuestions);clearPending();status('Report saved. One wallet point was deducted.');}}
+ catch(e){if([400,402,404,502,503].includes(e.status)){clearPending();status(e.message,true);}else{$('recover').hidden=false;status('The result is not confirmed. Use CHECK FOR MY REPORT before generating another report.',true);}}
+ finally{busy=false;controls();scheduleRecovery();}
+};
+$('recover').onclick=()=>void recover();$('back').onclick=()=>location.replace('profile.html');$('signout').onclick=async()=>{if(await confirmKundliSignOut())void exit()};
+
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('report-text').textContent);status('Report copied.');}catch{status('Select the report text and copy it manually.',true);}};
+$('share').onclick=async()=>{try{if(navigator.share)await navigator.share({title:'Basic Kundli matching report',text:$('report-text').textContent});else $('copy').click();}catch(e){if(e.name!=='AbortError')status('Could not share the report.',true);}};
+// Keep the PDF/print action within Kundli history so Browser Back restores this screen.
+let pdfReturnScroll=0;
+$('pdf').onclick=()=>{
+ pdfReturnScroll=window.scrollY;
+ if(!history.state?.kundliPdf)history.pushState({...history.state,kundliPdf:true},'',location.href);
+ status('In the print window, choose Save as PDF.');
+ window.print();
+};
+window.addEventListener('popstate',()=>{
+ if(!active())return;
+ status('');
+ window.scrollTo(0,pdfReturnScroll);
+});
+$('clear').onclick=async()=>{if(busy||pending)return;if(!await confirmAction('CLEAR REPORT AND DETAILS?','Clear this report and the bride and groom details from this screen? Your saved cloud report remains available.'))return;report(null);$('matching-form').reset();verified.bride='';verified.groom='';for(const who of ['bride','groom'])$(who+'-suggestions').replaceChildren();status('');};
+$('delete-account').onclick=async()=>{if(busy)return;busy=true;controls();try{await deleteWebsiteAccount({auth,active,request,exit,status:message=>{$('account-status').textContent=message}});}finally{busy=false;controls();}};
+try{
+ const {initializeApp}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js');const {getAuth,browserLocalPersistence,setPersistence,onAuthStateChanged}=await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');
+ auth=getAuth(initializeApp(firebaseConfig));await setPersistence(auth,browserLocalPersistence);let started=false;
+ onAuthStateChanged(auth,async current=>{if(exiting)return;user=current;if(!current){$('app').hidden=true;location.replace('login.html');return;}if(!active()){void exit();return;}check();if(started)return;started=true;
+ if(!/^[a-zA-Z0-9-]{12,80}$/.test(profileId||'')){location.replace('profile.html');return;}
+ try{const data=await request('/v1/cloud/profiles');profile=data.records.find(r=>r.profile.id===profileId)?.profile;if(!profile){location.replace('profile.html');return;}
+ const w=await request('/v1/web/wallet');price(w.priceInr);wallet(w.availableQuestions);setupWebsitePayments({getUser:()=>user,active,request,wallet,button:$('payment'),status:$('payment-status'),ready:w.paymentsReady===true});
+ pendingKey=`astroask-website-kundli:${user.uid}:${profileId}`;pending=sessionStorage.getItem(pendingKey)||w.activeKundliRequestId||'';if(pending)sessionStorage.setItem(pendingKey,pending);await restoreCloudRequest();
+ $('loading').hidden=true;$('app').hidden=false;controls();
+ if(pending){$('recover').hidden=false;await recover();}else{const latest=await request('/v1/web/kundli/latest?profileId='+encodeURIComponent(profileId));report(latest.report);wallet(latest.availableQuestions);}
+ }catch(e){if(!active()){void exit();return;}$('loading').hidden=false;$('loading').textContent='Could not load the matching screen: '+e.message+'. Deploy the updated website backend, then reload.';}
+ });
+}catch{$('loading').textContent='Sign-in could not load. Check your internet connection.';}
+
+</script></body></html>
