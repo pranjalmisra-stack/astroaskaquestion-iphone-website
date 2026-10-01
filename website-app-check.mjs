@@ -1,12 +1,16 @@
-import { initializeAppCheck, ReCaptchaV3Provider, getToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app-check.js";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app-check.js";
 
-const recaptchaSiteKey = "6LejyNktAAAAAKvLRJ9LCbJ_IfBc1Mis9PIUVkTB";
+// Replace this with the public site key from your score-based reCAPTCHA Enterprise key.
+const recaptchaEnterpriseSiteKey = "PASTE_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE";
 let appCheckInstance;
 
 export function initializeWebsiteAppCheck(firebaseApp) {
+  if (recaptchaEnterpriseSiteKey === "PASTE_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE") {
+    throw new Error("Add the reCAPTCHA Enterprise site key to website-app-check.mjs before using App Check.");
+  }
   if (!appCheckInstance) {
     appCheckInstance = initializeAppCheck(firebaseApp, {
-      provider: new ReCaptchaV3Provider(recaptchaSiteKey),
+      provider: new ReCaptchaEnterpriseProvider(recaptchaEnterpriseSiteKey),
       isTokenAutoRefreshEnabled: true
     });
   }
