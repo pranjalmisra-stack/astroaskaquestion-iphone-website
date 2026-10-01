@@ -64,6 +64,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <button id="add" type="button">+ ADD ANOTHER PROFILE</button>
       <div class="card" id="selected-card" hidden></div>
       <button id="ask" type="button">ASK YOUR QUESTION</button>
+      <button id="kp-ask" type="button">ASK YOUR KP ASTROLOGY QUESTION</button>
       <button id="kundli" type="button">GENERATE BASIC KUNDLI MATCHING REPORT</button>
       <button id="delete-account" type="button">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button>
       <button class="outline" id="edit" type="button">EDIT BIRTH DETAILS</button>
@@ -128,14 +129,42 @@ const kundliButtonTranslations={
   te:"ప్రాథమిక జాతక సరిపోలిక నివేదికను రూపొందించండి",
   ur:"بنیادی کنڈلی میلان رپورٹ بنائیں"
 };
+
+const kpAskButtonTranslations={
+  en:"ASK YOUR KP ASTROLOGY QUESTION",
+  as:"আপোনাৰ KP জ্যোতিষ প্ৰশ্ন সোধক",
+  bn:"আপনার KP জ্যোতিষ প্রশ্ন জিজ্ঞাসা করুন",
+  doi:"अपना KP ज्योतिष प्रश्न पूछो",
+  gu:"તમારો KP જ્યોતિષ પ્રશ્ન પૂછો",
+  hi:"अपना KP ज्योतिष प्रश्न पूछें",
+  kn:"ನಿಮ್ಮ KP ಜ್ಯೋತಿಷ್ಯ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ",
+  kok:"आपलो KP ज्योतिष प्रश्न विचारात",
+  mai:"अपन KP ज्योतिष प्रश्न पूछू",
+  ml:"നിങ്ങളുടെ KP ജ്യോതിഷ ചോദ്യം ചോദിക്കുക",
+  mni:"ꯅꯪꯒꯤ KP ꯖ꯭ꯌꯣꯇꯤꯁ ꯋꯥꯍꯪ ꯍꯥꯡꯗꯣꯛꯄꯤꯌꯨ",
+  mr:"तुमचा KP ज्योतिष प्रश्न विचारा",
+  ne:"आफ्नो KP ज्योतिष प्रश्न सोध्नुहोस्",
+  or:"ଆପଣଙ୍କର KP ଜ୍ୟୋତିଷ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ",
+  pa:"ਆਪਣਾ KP ਜੋਤਿਸ਼ ਸਵਾਲ ਪੁੱਛੋ",
+  sa:"स्वीयं KP ज्योतिषप्रश्नं पृच्छत",
+  sd:"پنهنجو KP نجوم جو سوال پڇو",
+  ta:"உங்கள் KP ஜோதிடக் கேள்வியைக் கேளுங்கள்",
+  te:"మీ KP జ్యోతిష్య ప్రశ్నను అడగండి",
+  ur:"اپنا KP علم نجوم کا سوال پوچھیں"
+};
 const kundliButton=document.getElementById("kundli");
+const kpAskButton=document.getElementById("kp-ask");
 if(kundliButton)kundliButton.dataset.languagePrivate="true";
-function updateKundliButtonLanguage(){
+if(kpAskButton)kpAskButton.dataset.languagePrivate="true";
+function updateProfileActionButtonLanguages(){
   const code=localStorage.getItem("astroask-website-language")||"en";
   if(kundliButton)kundliButton.textContent=kundliButtonTranslations[code]||kundliButtonTranslations.en;
+  if(kpAskButton)kpAskButton.textContent=kpAskButtonTranslations[code]||kpAskButtonTranslations.en;
 }
-updateKundliButtonLanguage();
-window.addEventListener("storage",event=>{if(event.key==="astroask-website-language")updateKundliButtonLanguage();});
+updateProfileActionButtonLanguages();
+window.addEventListener("storage",event=>{
+  if(event.key==="astroask-website-language")updateProfileActionButtonLanguages();
+});
 startWebsiteLanguage();
   import { confirmAction, deleteWebsiteAccount } from "./website-actions.mjs";
   const firebaseConfig = {
@@ -224,6 +253,10 @@ startWebsiteLanguage();
     target.replaceChildren(detail("Profile", profile.nickname || "Private Profile"), detail("Date of birth", formatBirthDate(profile.birthDate)), detail("Birth time", formatBirthTime(profile.birthTime)), detail("Place of birth city name", profile.birthPlace), ...(profile.currentLocation ? [detail("Current city", profile.currentLocation)] : []), detail("Gender", profile.gender?.toUpperCase()), detail("Marital status", profile.maritalStatus?.toUpperCase()));
   }
   $("ask").addEventListener("click", () => { if (!sessionActive()) { void exit(); return; } if (selected) location.assign("ask.html?profile=" + encodeURIComponent(selected.profile.id)); });
+  $("kp-ask").addEventListener("click", () => {
+    if (!sessionActive()) { void exit(); return; }
+    if (selected) location.assign("kp-ask.html?profile=" + encodeURIComponent(selected.profile.id));
+  });
   function actionStatus(message) { $("action-status").textContent=message;$("action-status").hidden=false; }
   $("kundli").onclick=()=>{if(!sessionActive()){void exit();return;}if(selected)location.assign("kundli.html?profile="+encodeURIComponent(selected.profile.id));};
   let deleting=false;
