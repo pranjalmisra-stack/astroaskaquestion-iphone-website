@@ -105,6 +105,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </main>
 <script type="module">
 import {startWebsiteLanguage} from "./website-language.mjs";
+import {initializeWebsiteAppCheck, websiteAppCheckHeaders} from "./website-app-check.mjs";
 const kundliButtonTranslations={
   en:"GENERATE BASIC KUNDLI MATCHING REPORT",
   as:"কুণ্ডলী মিলনৰ মৌলিক প্ৰতিবেদন সৃষ্টি কৰক",
@@ -196,8 +197,9 @@ startWebsiteLanguage();
     if (signOutInProgress || !sessionActive()) throw Error("Your login session has ended.");
     checkTimeout();
     const token = await user.getIdToken();
+    const appCheckHeaders = await websiteAppCheckHeaders();
     if (!sessionActive()) throw Error("Your login session has ended.");
-    const response = await fetch(apiRoot + path, { ...options, headers: { "Accept": "application/json", "Authorization": `Bearer ${token}`, ...(options.body ? { "Content-Type": "application/json" } : {}) } });
+    const response = await fetch(apiRoot + path, { ...options, headers: { "Accept": "application/json", "Authorization": `Bearer ${token}`, ...appCheckHeaders, ...(options.body ? { "Content-Type": "application/json" } : {}) } });
     if (!sessionActive()) throw Error("Your login session has ended.");
     const data = await response.json();
     if (!response.ok) throw Error(data.error || `Cloud service returned HTTP ${response.status}.`);
@@ -312,6 +314,7 @@ startWebsiteLanguage();
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js");
     const { getAuth, browserLocalPersistence, onAuthStateChanged, setPersistence } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js");
     const firebaseApp = initializeApp(firebaseConfig);
+    initializeWebsiteAppCheck(firebaseApp);
     auth = getAuth(firebaseApp); await setPersistence(auth, browserLocalPersistence);
     onAuthStateChanged(auth, current => {
       if (signOutInProgress) return;

@@ -71,6 +71,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   <footer><a href="privacy-policy.html">Privacy Policy</a> · <a href="account-deletion.html">Account Deletion</a></footer>
   <script type="module">
 import {startWebsiteLanguage} from "./website-language.mjs";
+import {initializeWebsiteAppCheck} from "./website-app-check.mjs";
 startWebsiteLanguage();
     const firebaseConfig = {
   "apiKey": "AIzaSyBA4HhtLV4iGdTR5BJIGaar4jGLPsbBLAY",
@@ -88,7 +89,9 @@ startWebsiteLanguage();
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js");
         const { getAuth, GoogleAuthProvider, browserLocalPersistence, onAuthStateChanged, setPersistence, signInWithPopup, signOut } =
           await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js");
-        const auth = getAuth(initializeApp(firebaseConfig));
+        const firebaseApp = initializeApp(firebaseConfig);
+        initializeWebsiteAppCheck(firebaseApp);
+        const auth = getAuth(firebaseApp);
         const provider = new GoogleAuthProvider();
         const timeoutMs = 15 * 60 * 1000;
         const activityKey = "astroask-website-last-activity";
