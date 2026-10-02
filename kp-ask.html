@@ -1185,14 +1185,6 @@ function updateKpUiLanguage(){
   }
 }
 
-updateKpUiLanguage();
-
-window.addEventListener("storage",event=>{
-  if(event.key==="astroask-website-language"){
-    updateKpUiLanguage();
-  }
-});
-
 /* =========================================================
    FIREBASE / WEBSITE MODULES
    ========================================================= */
@@ -1796,6 +1788,15 @@ function wallet(points){
 let historyVersion='',
     historyItems=[],
     historyBusy=false;
+
+// Initialize language only after historyItems, records, and profileId exist.
+updateKpUiLanguage();
+
+window.addEventListener("storage",event=>{
+  if(event.key==="astroask-website-language"){
+    updateKpUiLanguage();
+  }
+});
 
 function historyView(){
 
