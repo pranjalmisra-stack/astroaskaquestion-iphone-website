@@ -39,7 +39,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   header,nav,footer{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
 }
 </style></head><body><main><p id="loading" role="status">Checking your sign-in…</p><div id="app" hidden>
-<h1 id="kp-page-title" data-language-private="true">ASK YOUR KP ASTROLOGY QUESTION</h1><p><strong id="kp-answer-label" data-language-private="true">Your KP astrology answer</strong></p>
+<h1 id="kp-page-title" data-language-private="true">ASK YOUR KP ASTROLOGY QUESTION</h1>
 <div id="profile" class="card"></div>
 <p class="small">AstroAskAQuestion is the website interface. AstrologyAPI KP endpoints provide the KP astrology data and the AI model interprets that data.</p>
 <div class="card"><h2 id="balance">Wallet balance: loading…</h2><p id="point-price">Price per point: loading…</p></div>
@@ -49,10 +49,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <textarea id="question" maxlength="1200" placeholder="Type your question here or select one from the categories below" aria-label="Your astrology question"></textarea>
 <p class="small">Maximum 60 words per question.<br><span id="count">0 / 60</span></p>
 <p class="tips">Tips for asking astrology questions: Keep your question as specific as possible and related to your life. If you want remedies for a solution, you can add a comment in your question at the end saying, “Give me some remedies”.</p>
-<p class="tips">After selecting a question from the list below or writing your own custom question above, scroll down and tap ASK YOUR QUESTION to submit your question.</p>
+<p class="tips">After selecting a question from the list below or writing your own custom question above, scroll down and tap ASK YOUR KP ASTROLOGY QUESTION to submit your question.</p>
 <h2>TIP QUESTION CATEGORIES</h2><div id="categories"></div>
 <p class="small">Your selected birth details and question are sent to the KP astrology service to generate the answer. For a non-English answer, Google Translation processes the question and answer.</p>
-<button id="submit" disabled>ASK YOUR QUESTION</button><p id="status" role="status"></p><button id="recover" class="outline" hidden>CHECK FOR MY ANSWER</button>
+<button id="submit" disabled data-language-private="true">ASK YOUR KP ASTROLOGY QUESTION</button><p id="status" role="status"></p><button id="recover" class="outline" hidden>CHECK FOR MY ANSWER</button>
 <div class="card"><h2 id="answer-heading">Your KP astrology answer</h2><div id="answer" class="answer" aria-live="polite"></div><div class="row"><button id="copy" class="outline" disabled>COPY</button><button id="share" class="outline" disabled>SHARE</button></div><button id="new" class="outline">ASK A NEW KP QUESTION</button><p class="small">Astrology is interpretive and should not be treated as certainty or professional medical advice, legal or financial advice. Astrology answers are for personal guidance.</p></div>
 <button id="back" class="outline">BACK TO PROFILE</button><button id="signout" class="outline">SIGN OUT</button><button id="delete-account">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button><p id="account-status" class="small" role="status"></p>
 </div></main><dialog id="confirm-delete"><h2 id="confirm-title"></h2><p>This permanently deletes the selected past answer data from your cloud account.</p><div class="row"><button id="confirm-no" class="outline">NO</button><button id="confirm-yes">YES</button></div></dialog><script type="module">
@@ -228,7 +228,7 @@ function updateKpUiLanguage(){
   const t=kpUiTranslations[code]||kpUiTranslations.en;
   const set=(id,value)=>{const el=document.getElementById(id);if(el){el.textContent=value;el.dataset.languagePrivate="true";}};
   set("kp-page-title",t.title);
-  set("kp-answer-label",t.answer);
+  set("submit",t.title);
   set("past-heading",t.pastHeading);
   set("answer-heading",t.answer);
   const clear=document.getElementById("clear-history");
