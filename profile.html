@@ -64,7 +64,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <button id="add" type="button">+ ADD ANOTHER PROFILE</button>
       <div class="card" id="selected-card" hidden></div>
       <button id="ask" type="button">ASK YOUR QUESTION</button>
-      <button id="kp-ask" type="button">ASK YOUR KP ASTROLOGY QUESTION</button>
+      <button id="kp-ask" type="button" hidden>ASK YOUR KP ASTROLOGY QUESTION</button>
       <button id="kundli" type="button">GENERATE BASIC KUNDLI MATCHING REPORT</button>
       <button id="delete-account" type="button">DELETE MY ACCOUNT FROM CLOUD PERMANENTLY</button>
       <button class="outline" id="edit" type="button">EDIT BIRTH DETAILS</button>
@@ -154,6 +154,14 @@ const kpAskButtonTranslations={
 };
 const kundliButton=document.getElementById("kundli");
 const kpAskButton=document.getElementById("kp-ask");
+const KP_ALLOWED_EMAIL = "pranjal.misra@gmail.com";
+function updateKpButtonVisibility(currentUser) {
+  const isAllowed =
+    currentUser?.email?.trim().toLowerCase() === KP_ALLOWED_EMAIL &&
+    currentUser?.emailVerified === true;
+
+  kpAskButton.hidden = !isAllowed;
+}
 if(kundliButton)kundliButton.dataset.languagePrivate="true";
 if(kpAskButton)kpAskButton.dataset.languagePrivate="true";
 function updateProfileActionButtonLanguages(){
@@ -192,7 +200,9 @@ startWebsiteLanguage();
     for (const screen of screens) $(screen).hidden = screen !== name; $("view").hidden = false; $("loading").hidden = true; }
   async function exit() {
     if (signOutInProgress) return;
-    signOutInProgress = true; $("view").hidden = true; $("loading").hidden = false; $("loading").textContent = "Signing out…";
+    signOutInProgress = true; $("kp-ask").hidden = true;
+
+$("view").hidden = true; $("loading").hidden = false; $("loading").textContent = "Signing out…";
     clearTimeout(timer); localStorage.removeItem(activityKey);
     try { const { signOut } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"); await signOut(auth); location.replace("index.html"); }
     catch { $("loading").textContent = "Sign-out failed. Reload the page and try again."; signOutInProgress = false; }
@@ -349,9 +359,13 @@ startWebsiteLanguage();
     const firebaseApp = initializeApp(firebaseConfig);
     initializeWebsiteAppCheck(firebaseApp);
     auth = getAuth(firebaseApp); await setPersistence(auth, browserLocalPersistence);
-    onAuthStateChanged(auth, current => {
-      if (signOutInProgress) return;
-      if (!current) { user = null; records = []; selected = null; $("view").hidden = true; location.replace("login.html"); return; }
+    
+onAuthStateChanged(auth, current => {
+  updateKpButtonVisibility(current);
+
+  if (signOutInProgress) return;
+
+      if (!current) { $("kp-ask").hidden = true; user = null; records = []; selected = null; $("view").hidden = true; location.replace("login.html"); return; }
       user = current; lastActivity = Number(localStorage.getItem(activityKey)) || 0;
       if (!lastActivity || Date.now() - lastActivity >= timeoutMs) { void exit(); return; }
       history.pushState({ astroaskProfileGuard: true }, "", location.href);
