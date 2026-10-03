@@ -93,6 +93,8 @@ startWebsiteLanguage();
         initializeWebsiteAppCheck(firebaseApp);
         const auth = getAuth(firebaseApp);
         const provider = new GoogleAuthProvider();
+        // Always ask Google to display the account chooser.
+        provider.setCustomParameters({ prompt: "select_account" });
         const timeoutMs = 15 * 60 * 1000;
         const activityKey = "astroask-website-last-activity";
         let signingOut = false;
@@ -169,36 +171,39 @@ startWebsiteLanguage();
             void endSession("Signed out after 15 minutes of inactivity.");
             return;
           }
-          signInButton.hidden = Boolean(user);
+          // Keep this page visible even if Firebase restores a previous session.
+          // The user can explicitly choose a Google account by pressing the button.
+          signInButton.hidden = false;
           signOutButton.hidden = !user;
           signInButton.disabled = false;
           if (user) {
-            lastActivity = Number(localStorage.getItem(activityKey)) || 0;
-            if (!lastActivity) { void endSession("Your session has ended. Please sign in again."); return; }
+            lastActivity = Number(localStorage.getItem(activityKey)) || lastActivity;
             if (!backGuard) {
               history.pushState({ astroaskLoginGuard: true }, "", window.location.href);
               backGuard = true;
             }
             checkInactivity();
-            window.location.replace("welcome.html");
+            status.textContent = `Currently signed in as ${user.displayName || user.email || "Google user"}. Select Continue with Google to choose an account.`;
           } else {
             clearTimeout(timer);
-            localStorage.removeItem(activityKey);
+            if (!signInButton.disabled) localStorage.removeItem(activityKey);
+            status.textContent = "Choose your Google account to sign in.";
           }
-          status.textContent = user
-            ? `Signed in as ${user.displayName || user.email || "Google user"}. Website account features are being prepared.`
-            : "Choose your Google account to sign in.";
         }, () => { status.textContent = "Could not check your sign-in status. Please reload the page."; });
         signInButton.addEventListener("click", async () => {
           signInButton.disabled = true;
           status.textContent = "Opening Google sign-in…";
           try {
+            // Sign out the current website account before opening Google sign-in.
+            // This avoids silently reusing the previous Firebase user on mobile.
+            if (auth.currentUser) await signOut(auth);
             lastActivity = Date.now();
             localStorage.setItem(activityKey, String(lastActivity));
             await signInWithPopup(auth, provider);
             lastActivity = Date.now();
             localStorage.setItem(activityKey, String(lastActivity));
             checkInactivity();
+            window.location.replace("welcome.html");
           }
           catch (error) {
             if (!auth.currentUser) localStorage.removeItem(activityKey);
