@@ -368,7 +368,7 @@ footer{
   position:absolute;
   top:8px;
   right:18px;
-  width:250px;
+  width:190px;
   margin:0;
   padding:0;
   background:transparent;
@@ -395,33 +395,33 @@ footer{
   font-weight:bold;
   line-height:1.4;
   text-align:center;
-  white-space:nowrap;
 }
 
 @media screen and (max-width:700px){
   footer{
-    min-height:205px;
+    min-height:230px;
+    padding-bottom:115px;
   }
 
   .footer-qr{
-    top:8px;
+    top:auto;
     right:8px;
-    width:220px;
+    bottom:8px;
+    width:110px;
     margin:0;
     padding:0;
+    z-index:5;
   }
 
   .footer-qr img{
-    width:118px;
-    height:118px;
+    width:100px;
+    height:100px;
     padding:4px;
+    margin:0 auto;
   }
 
   .footer-qr p{
-    margin-top:5px;
-    font-size:10px;
-    line-height:1.3;
-    white-space:nowrap;
+    display:none;
   }
 }
 </style>
@@ -750,14 +750,10 @@ https://astroaskaquestion.co.in/
 </a>
 </p>
 
-
 <div class="footer-qr">
-  <a href="https://astroaskaquestion.co.in/" aria-label="Visit the official AstroAskAQuestion website">
+  <a>
     <img src="qrcode_astroaskaquestion.com.png" alt="AstroAskAQuestion QR Code">
   </a>
-  <p>
-    Scan to visit the official website
-  </p>
 </div>
 
 </footer>
